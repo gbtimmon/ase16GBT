@@ -1,1 +1,1 @@
-print "My name is Peng Wang\n"
+print('Peng Wang');
