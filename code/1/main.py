@@ -1,5 +1,5 @@
-#/usr/bin/python2
-from signal import SIGHUP, SIG_IGN, SIGKILL, SIGTERM, signal
+/usr/bin/python2
 import utest
 import timmons
 import laurel
+import wang
