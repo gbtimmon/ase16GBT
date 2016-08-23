@@ -82,9 +82,4 @@ def _any3():
     assert v < 2
   print("")
   
-@ok
-def bonusUnitTest():
-  "Is 1 + 1 = 2?"
-  assert (1+1)==2, "equality failure"
- 
 oks()
