@@ -14,3 +14,7 @@ print "\nLoading and testing wang\n\n"
 import wang
 
 utest.oks()
+
+print "\nLoading and testing goff\n\n"
+import goff
+utest.oks()
