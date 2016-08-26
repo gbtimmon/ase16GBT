@@ -1,6 +1,8 @@
 #/usr/bin/python2
 
 import utest
+import sys
+sys.dont_write_bytecode=true
 
 print "\nLoading and testing Timmons\n\n"
 import timmons
