@@ -140,17 +140,58 @@ test(exercise_4_5, ["Spam"])
 """
    EXERCISE 5
 """
+def print_row ():
+  print "+ - - - -",
 
-def make_border(cols) :
-    return (("+ " + ( "- " * 4 )) * cols) + "+\n"
+def print_end ():
+  print "+"
 
-def make_row(cols):
-    return ((("/ " + ( "  " * 4 )) * cols) + "+\n") * 4
+def print_orow():
+  print "/        ",
 
-def print_grid(x,y) :
-  print (((make_border(y) + make_row(y)) * x) + make_border(y))
+def print_oend():
+  print "/"  
 
-test(print_grid, [2,2])
+def do_twice(f):
+  f()
+  f()
 
-test(print_grid, [4,4])
+def print_2row():
+  do_twice(print_row)
+  print_end()
 
+def print_2orow():
+  do_twice(print_orow)
+  print_oend()
+
+def do_four(f):
+  do_twice(f)
+  do_twice(f)
+
+def print_whole_row() :
+  print_2row()
+  do_four(print_2orow)
+
+def make_22_grid():
+   do_twice(print_whole_row)
+   print_2row()
+
+test(make_22_grid)
+
+def print_4row():
+  do_four(print_row)
+  print_end()
+
+def print_4orow():
+  do_four(print_orow)
+  print_oend()
+
+def print_whole_4row() :
+  print_4row()
+  do_four(print_4orow)
+
+def make_44_grid():
+  do_four(print_whole_4row)
+  print_4row()
+
+test(make_44_grid)
