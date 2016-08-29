@@ -27,8 +27,8 @@ Within the section of design, the authors outlined concepts that the ripping tec
 3.4 New Results: 
 The authors were able to uncover 4 previously unfound bugs, as well as coverage and process cost. They outlined their findings in the tables below:
 
-![alt text](http://imgur.com/a/WtpC8 "Logo Title Text 1")
-http://imgur.com/a/WtpC8
+![alt text](https://github.com/gbtimmon/ase16GBT/blob/0401ccb02f253764e4d917455d531ca6a618e19b/read/Table12.png "Tables from paper)
+https://github.com/gbtimmon/ase16GBT/blob/0401ccb02f253764e4d917455d531ca6a618e19b/read/Table12.png
 
 4. Improvements:
 
