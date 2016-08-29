@@ -30,3 +30,6 @@
 
 #PYthon Compiled files
 *.pyc
+
+#mac file
+.DS_Store
