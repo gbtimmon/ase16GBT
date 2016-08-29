@@ -27,9 +27,8 @@ Within the section of design, the authors outlined concepts that the ripping tec
 3.4 New Results: 
 The authors were able to uncover 4 previously unfound bugs, as well as coverage and process cost. They outlined their findings in the tables below:
 
-Inline-style: 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
-https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
+![alt text](http://imgur.com/a/WtpC8 "Logo Title Text 1")
+http://imgur.com/a/WtpC8
 
 4. Improvements:
 
