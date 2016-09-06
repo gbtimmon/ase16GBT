@@ -1,6 +1,5 @@
 #!/usr/bin/python
 import sys
-import pprint
 
 class Employee:
 	def __init__(self, name, age):
@@ -8,8 +7,8 @@ class Employee:
 		self.age = age
 	
 	def __repr__():
-		pprint.pprint(self)
+		print('Employee Name: %s, Age: %d', name, age)
 	
-	def __lt__():
-		
+	def __lt__(self, other):
+		return self.age < other.age
 	
