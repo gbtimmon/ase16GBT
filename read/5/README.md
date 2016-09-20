@@ -9,8 +9,8 @@
 3. Brief Notes
 	1. Motivational Statements - The authors included a whole section (2. Motivating Example) that describes what they intended to research and prove. The author’s proposed algorithm works to identify anchor and connector events to achieve a specific initial state; this approach is intended to reach more complex, challenging event sequences that previous automated test frameworks do not reach. In their evaluation, the authors also listed and answered the questions they had intended to answer in this paper. 
 	2. Related Work - This paper builds on the concolic testing technique, ACTEve, by searching for particular targets from a given starting point; they also abstract the concolic execution used for reasoning with UI models. This paper also builds on Ma et al.’s proposed call-chain-backward symbolic execution, by constructing event sequences backward from a narrowed search and by considering the relationships between events.
-	3. Informative Visualizations - The authors included a helpful visual/generic script of their proposed algorithm that better describes how it functions. This figure is below. 
-	In addition, the authors included a graph to visualize the results of the event sequence lengths captured in their generated test cases. This figure is below.
+	3. Informative Visualizations - The authors included a helpful visual/generic script of their proposed algorithm that better describes how it functions. This figure is below. ![Algorithm](https://github.com/gbtimmon/ase16GBT/blob/master/read/5/Figure_4.png "Algorithm")
+	In addition, the authors included a graph to visualize the results of the event sequence lengths captured in their generated test cases. This figure is below. ![Results](https://github.com/gbtimmon/ase16GBT/blob/master/read/5/Figure_5.png "Results")
 
 	4. Future Work - The authors predicted various sequences that their algorithm would reach, but not all were covered in the generated tests. The authors proposed that improving the algorithm, specifically the symbolic constraint solver component, then all predicted event sequences would have been reached.
 4. Improvements
