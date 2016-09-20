@@ -11,10 +11,10 @@ class Solution :
         self.f2 = f2
 
 def f1(x):
-    return x * x
+    return x**2
 
 def f2(x):
-    return (x-2)*(x-2)
+    return (x-2)**2
 
 def schaffer_score(x) :
     return f1(x) + f2(x)
@@ -23,7 +23,7 @@ def p(old, new, t):
     return math.exp((old - new) / float(t))
 
 def newx():
-    return random.randint(-100000, 100000)
+    return random.randint(-10**5, 10**5)
 
 def neighbor(s):
     neighbor = s
@@ -37,7 +37,7 @@ def neighbor(s):
 
 max = schaffer_score(newx())
 min = max
-for n in xrange(99) :
+for n in xrange(10**6) :
     x = newx()
     result = schaffer_score(x)
     if(result < min) :
@@ -48,6 +48,8 @@ for n in xrange(99) :
 def energy(f1, f2) :
     return (((f1 + f2) - min) / float((max - min)))
 
+print('Min: %d' % min)
+print('Max: %d' % max)
 emax = 1
 kmax = 999
 k = 1
@@ -62,14 +64,14 @@ while (k <= kmax and e < emax):
     sn = neighbor(s)
     en = energy(sn.f1, sn.f2)
     '''If better than the best'''
-    if(en > eb) :
+    if(en < eb) :
         sb = sn
         eb = en
         s = sn
         e = en
         sys.stdout.write('!')
     '''if new solution is worse than previous one'''
-    if(en < e) :
+    if(en > e) :
         if(p(e, en, (k/float(kmax))) < random.random()) :
             '''randomly jump'''
             xn = newx()
