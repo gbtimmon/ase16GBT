@@ -1,4 +1,4 @@
-1. Paper
+1. Paper:
 	Casper S Jensen, M. R. Prasad, and A. Møller. Automated testing with targeted event sequence generation. In Proceedings of the 2013 International Symposium on Software Testing and Analysis, pages 67-77.
 
 2. Keywords
