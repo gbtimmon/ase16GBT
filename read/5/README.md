@@ -18,5 +18,5 @@
 	2. A good chunk of the paper describes and expands upon the figure of their event sequence generation algorithm, however, some aspects are very detailed in the paper, but others are not very well described, such as ExtractTestCase. 
 	3. The paper discusses a very good example application that motivated the generation of this algorithm, TaxCalculator, but the authors didn’t test their algorithm against this application. They could have used this application as a baseline and analyzed all event sequences found rather than just the complex ones.
 5. Relates to Readings
-	The AndroidRipper testing tool detailed in paper 1 is referred to in this paper as a “good starting point for automated testing,” as they prove why their algorithm is more detailed than the source logic of AndroidRipper.
-Unlike with paper 1, these authors only test their tool against complex event sequences rather than trying to baseline by finding all potential test cases.
+	1. The AndroidRipper testing tool detailed in paper 1 is referred to in this paper as a “good starting point for automated testing,” as they prove why their algorithm is more detailed than the source logic of AndroidRipper.
+	2. Unlike with paper 1, these authors only test their tool against complex event sequences rather than trying to baseline by finding all potential test cases.
