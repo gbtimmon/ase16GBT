@@ -153,38 +153,34 @@ def populate(problem, size):
     for _ in xrange(size):
         population.append(problem.generate_one())
     return population
-    #or if you good at python
-    #    return [problem.generate_one() for _ in xrange(size)]
+    #or
+    #return(problem.generate_one() for _ in xrange(size)
 
-print(populate(cone, 5))
+pop = populate(cone,5)
+print(pop)
 
 def crossover(mom, dad):
     # TODO 7: Create a new point which contains decisions from
     # the first half of mom and second half of dad
     n = len(mom.decisions)
-    return Point([mom.decisions[:n//2] + dad.decisions[n//2:]])
+    return Point(mom.decisions[:n//2] + dad.decisions[n//2:])
 
-print('CROSSOVER:')
 mom = cone.generate_one()
 dad = cone.generate_one()
 print(mom)
 print(dad)
-print(crossover(mom, dad))
+print(crossover(mom,dad))
+
+print(crossover(pop[0],pop[1]))
 
 def mutate(problem, point, mutation_rate=0.01):
     # TODO 8: Iterate through all the decisions in the point
-    # and if the probability is less than mutation rate
-    # change the decision(randomly set it between its max and min).
-    for i, d in enumerate(problem.decisions) :
-        if(random.random() < mutation_rate):
-            point.decisions[i] = random_value(d.low, d.high)
-    return point
-
-print('MUTATE:')
-point = cone.generate_one()
-print(point)
-mutate(cone, point, .5)
-print(point)
+  # and if the probability is less than mutation rate
+  # change the decision(randomly set it between its max and min).
+  for i, d in enumerate(problem.decisions):
+    if(random.random() < mutation_rate) :
+        point.decisions[i] = random_value(d.low, d.high)
+  return point
 
 def bdom(problem, one, two):
     """
@@ -192,26 +188,37 @@ def bdom(problem, one, two):
     """
     objs_one = problem.evaluate(one)
     objs_two = problem.evaluate(two)
-    at_least_one = False
+
+    everyOne = True
+    atLeastOne = False
+
+    """
+    val1 = [4,6]
+    val2 = [5,6]
+    for idx,val in enumerate(val1):
+        if(val > val2[idx]) :
+            everyOne = False
+        elif(val == val2[idx]) :
+            atLeastOne = True
+    """
+
+
+    for idx,val in enumerate(objs_one):
+        if(val > objs_two[idx]) :
+            everyOne = False
+        elif(val == objs_two[idx]) :
+            atLeastOne = True
+
+    if(everyOne and atLeastOne) :
+        dominates = True
+    else :
+        dominates = False
     # TODO 9: Return True/False based on the definition
     # of bdom above.
-    for idx, val in enumerate(objs_one):
-        if(val > objs_two[idx]):
-            return False
-        if(val == objs_two[idx]):
-            at_least_one = True
-
-    if(at_least_one):
-        dominates = True
-    else:
-        dominates = False
 
     return dominates
 
-print('BDOM:')
-strong = cone.generate_one()
-weak = cone.generate_one()
-print(bdom(cone, strong, weak))
+print(bdom(cone,pop[0],pop[1]))
 
 def fitness(problem, population, point):
     dominates = 0
@@ -220,25 +227,37 @@ def fitness(problem, population, point):
     # as the number of points dominated by it.
     # For example point dominates 5 members of population,
     # then fitness of point is 5.
+
     for another in population:
-        if bdom(problem, point, another) and (point != another):
+        if bdom(problem, point, another):
             dominates += 1
     return dominates
+
+''' should be 1 because it will run across the same point.'''
+print(fitness(cone, pop, pop[0]))
+
+print('HELLO WORLD\n')
 
 def elitism(problem, population, retain_size):
     # TODO 11: Sort the population with respect to the fitness
     # of the points and return the top 'retain_size' points of the population
+
     fitnesses = []
     for n in population:
         fitnesses.append((n, fitness(problem, population, n)))
+
     fitnesses = sorted(fitnesses, key=lambda x: x[1])
 
     results = []
     for x in fitnesses:
         results.append(x[0])
+
     return results[:retain_size]
 
-def ga(pop_size = 100, gens = 250):
+print(elitism(cone, pop, 3))
+
+
+def ga(pop_size=100, gens=250):
     problem = Problem()
     population = populate(problem, pop_size)
     [problem.evaluate(point) for point in population]
@@ -253,13 +272,14 @@ def ga(pop_size = 100, gens = 250):
             while (mom == dad):
                 dad = random.choice(population)
             child = mutate(problem, crossover(mom, dad))
-            if problem.is_valid(child) and child not in population+children:
+            if problem.is_valid(child) and child not in population + children:
                 children.append(child)
         population += children
         population = elitism(problem, population, pop_size)
         gen += 1
     print("")
     return initial_population, population
+
 
 def plot_pareto(initial, final):
     initial_objs = [point.objectives for point in initial]
