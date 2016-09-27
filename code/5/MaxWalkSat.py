@@ -30,12 +30,12 @@ def score(f1, f2):
 
 
 def newx():
-    x1 = random.randint(0, 10)
-    x2 = random.randint(0, 10)
-    x3 = random.randint(1, 5)
-    x4 = random.randint(0, 6)
-    x5 = random.randint(1, 5)
-    x6 = random.randint(0, 10)
+    x1 = randint(0, 10)
+    x2 = randint(0, 10)
+    x3 = randint(1, 5)
+    x4 = randint(0, 6)
+    x5 = randint(1, 5)
+    x6 = randint(0, 10)
     return Solution(x1, x2, x3, x4, x5, x6)
 
 
@@ -59,50 +59,53 @@ def new_valid_x():
 def energy(f1, f2):
     return (((f1 + f2) - min) / float((max - min)))
 
-
+eb = 0
 s = new_valid_x()
 max = score(f1(s), f2(s))
 min = max
-for i in xrange(10**6):
+for i in xrange(10**3):
     s = new_valid_x()
     sc = score(f1(s), f2(s))
     if(sc > max):
         max = sc
     if(sc < min):
         min = sc
-
-max_tries = 10**5
-max_changes = 10**5
+max_tries = 10**3
+max_changes = 10**3
 p = 0.5
 
 
-
 for i in xrange(max_tries):
-    solution = get_valid_x()
+    solution = new_valid_x()
 
     for j in xrange(max_changes):
         if energy(solution.f1, solution.f2) > max:
-            return solution
+            sb = solution
+            eb = energy(solution.f1, solution.f2)
 
-        c = random.randint(1, 6)
-        if p < random.random():
+        c = randint(1, 6)
+        if p < random():
             while True:
                 if c == 1:
-                    solution.x1 = random.randint(0, 10)
+                    solution.x1 = randint(0, 10)
                 if c == 2:
-                    solution.x2 = random.randint(0, 10)
+                    solution.x2 = randint(0, 10)
                 if c == 3:
-                    solution.x3 = random.randint(1, 5)
+                    solution.x3 = randint(1, 5)
                 if c == 4:
-                    solution.x4 = random.randint(0, 6)
+                    solution.x4 = randint(0, 6)
                 if c == 5:
-                    solution.x5 = random.randint(1, 5)
+                    solution.x5 = randint(1, 5)
                 if c == 6:
-                    solution.x6 = random.randint(0, 10)
+                    solution.x6 = randint(0, 10)
                 if ok(solution):
                     solution.f1 = f1(solution)
                     solution.f2 = f2(solution)
-                    break
+                    en = energy(solution.f1, solution.f2)
+                    if(en > eb):
+                        eb = en
+                        sb = solution
+                break
         else:
             while True:
                 if c == 1:
@@ -113,70 +116,85 @@ for i in xrange(max_tries):
                             solution = sn
                             solution.f1 = f1(s)
                             solution.f2 = f2(s)
-                            en = energy(f1, f2)
+                            en = energy(solution.f1, solution.f2)
                             if(en > eb):
                                 eb = en
                                 sb = solution
-                                break
-                if c == 2:
-                    solution.x2 = random.randint(0, 10)
-                if c == 3:
-                    solution.x3 = random.randint(1, 5)
-                if c == 4:
-                    solution.x4 = random.randint(0, 6)
-                if c == 5:
-                    solution.x5 = random.randint(1, 5)
-                if c == 6:
-                    solution.x6 = random.randint(0, 10)
-                if ok(solution):
-                    solution.f1 = f1(solution)
-                    solution.f2 = f2(solution)
                     break
-
-                        if (score(solution) > score(c)):
-                res = c
-        else:
-            maximizeScore(c)
-            res = c
-
-
-
-class simulated_maxWalkSat() :
-    def __init__(
-           self,
-           metric       = osyczka2,
-           output       = True,
-           drunk_metric = drunkeness,
-           max_iter     = 5000,
-           min_energy   = 1e-6,
-           valid_range  = (-10e6, 10e6),
-           seed         = None,
-           bline_iter   = 200
-    ):
-
-        self.output     = output
-        self.random     = Random()            # seeded random.
-        self.metric     = metric              # Function for determining energy
-        self.isDrunk    = drunk_metric        # Function for determining if I should go worse
-        self.max_iter   = max_iter            # max number of iterations before I give up
-        self.min_energy = min_energy          # target energy
-        self.range      = valid_range         # valid range of values to search for solution
-        self.iter       = 0                   # current iter
-        self.terminated = False               # is terminated
-        self.omin       = 0
-        self.omax       = 0
-        self.line_size  = 25
-
-        if( seed is not None ) :
-            self.random.seed( int(seed) )
-
-        for _ in xrange( bline_iter ) :
-            x = sum( self.metric( self.random.randint( *self.range ) ) )
-            self.omin = min( self.omin, x )
-            self.omax = max( self.omax, x )
-
-        self.cur_state  = self.random.randint( *self.range ) # initial state
-        self.cur_energy = self.energy(self.cur_state)        # initial energy
-        self.bst_state  = self.cur_state                     # initial best state
-        self.bst_energy = self.cur_energy                    # initial best energy
-
+                if c == 2:
+                    sn = solution
+                    for x in xrange(1, 11):
+                        sn.x2 = x
+                        if ok(sn):
+                            solution = sn
+                            solution.f1 = f1(s)
+                            solution.f2 = f2(s)
+                            en = energy(solution.f1, solution.f2)
+                            if(en > eb):
+                                eb = en
+                                sb = solution
+                    break
+                if c == 3:
+                    sn = solution
+                    for x in xrange(1, 6):
+                        sn.x3 = x
+                        if ok(sn):
+                            solution = sn
+                            solution.f1 = f1(s)
+                            solution.f2 = f2(s)
+                            en = energy(solution.f1, solution.f2)
+                            if(en > eb):
+                                eb = en
+                                sb = solution
+                    break
+                if c == 4:
+                    sn = solution
+                    for x in xrange(1, 7):
+                        sn.x4 = x
+                        if ok(sn):
+                            solution = sn
+                            solution.f1 = f1(s)
+                            solution.f2 = f2(s)
+                            en = energy(solution.f1, solution.f2)
+                            if(en > eb):
+                                eb = en
+                                sb = solution
+                    break
+                if c == 5:
+                    sn = solution
+                    for x in xrange(1, 6):
+                        sn.x5 = x
+                        if ok(sn):
+                            solution = sn
+                            solution.f1 = f1(s)
+                            solution.f2 = f2(s)
+                            en = energy(solution.f1, solution.f2)
+                            if(en > eb):
+                                eb = en
+                                sb = solution
+                    break
+                if c == 6:
+                    sn = solution
+                    for x in xrange(1, 11):
+                        sn.x6 = x
+                        if ok(sn):
+                            solution = sn
+                            solution.f1 = f1(s)
+                            solution.f2 = f2(s)
+                            en = energy(solution.f1, solution.f2)
+                            if(en > eb):
+                                eb = en
+                                sb = solution
+                    break
+            
+print('\n')
+print('SB:')
+print('X1 = %d', sb.x1)
+print('X2 = %d', sb.x2)
+print('X3 = %d', sb.x3)
+print('X4 = %d', sb.x4)
+print('X5 = %d', sb.x5)
+print('X6 = %d', sb.x6)
+print('F1 = %d', sb.f1)
+print('F2 = %d', sb.f2)
+print('EB = %f', eb)
