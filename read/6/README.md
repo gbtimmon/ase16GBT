@@ -8,9 +8,9 @@
 	4. System services - “A fixed set of processes that provide abstractions of different functionality of an Android device,” [pg 228]. In other words, these are different sets of functionality, either internal or external, that are triggered by incoming data.
 3. Brief Notes
 	1. Informative Visualizations - The authors included helpful diagrams of the entire process which their program flows through. 
-	![Diagram](https://github.com/gbtimmon/ase16GBT/blob/master/read/6/Figure_1.png "Process Diagram")
+	![Diagram](https://github.com/gbtimmon/ase16GBT/blob/master/read/6/Figure_2.png "Process Diagram")
 	The authors also included their state transition to show the program moves through the execution.
-	![StateMachine](https://github.com/gbtimmon/ase16GBT/blob/master/read/6/Figure_2.png "State Machine")
+	![StateMachine](https://github.com/gbtimmon/ase16GBT/blob/master/read/6/Figure_1.png "State Machine")
 	2. Baseline Results and New Results - The authors included comparison graphs of their code coverage against different baselines to get a clearer picture of the new vs. the old results.
 	![Results](https://github.com/gbtimmon/ase16GBT/blob/master/read/6/Figure_3.png "Results")
 	3. Sampling Procedures - The authors very clearly and in a detailed manner described how they tested their program. They used consistent hardware ( Linux machines with 8GB memory and 3.0GHz processors) and consistent software version (Android’s Gingerbread) and described why. They choose the most popular software version, not necessarily the newest or most stable, as it is installed on the most devices. They sampled 50 randomly chosen open-source applications to test against by keeping the SLOC from 16 to 21.9K.
