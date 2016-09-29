@@ -189,32 +189,21 @@ def bdom(problem, one, two):
     objs_one = problem.evaluate(one)
     objs_two = problem.evaluate(two)
 
-    everyOne = True
-    atLeastOne = False
+    if(one == two):
+        return False;
 
-    """
-    val1 = [4,6]
-    val2 = [5,6]
-    for idx,val in enumerate(val1):
-        if(val > val2[idx]) :
-            everyOne = False
-        elif(val == val2[idx]) :
-            atLeastOne = True
-    """
-
-
-    for idx,val in enumerate(objs_one):
-        if(val > objs_two[idx]) :
-            everyOne = False
-        elif(val == objs_two[idx]) :
-            atLeastOne = True
-
-    if(everyOne and atLeastOne) :
-        dominates = True
-    else :
-        dominates = False
+    dominates = False
     # TODO 9: Return True/False based on the definition
     # of bdom above.
+    first = True
+    second = False
+    for i,_ in enumerate(problem.objectives):
+        if ((first is True) & gt(one.objectives[i], two.objectives[i])):
+            first = False
+        elif (not second & (one.objectives[i] is not two.objectives[i])):
+            second = True
+
+    dominates = first & second
 
     return dominates
 
@@ -241,18 +230,9 @@ print('HELLO WORLD\n')
 def elitism(problem, population, retain_size):
     # TODO 11: Sort the population with respect to the fitness
     # of the points and return the top 'retain_size' points of the population
-
-    fitnesses = []
-    for n in population:
-        fitnesses.append((n, fitness(problem, population, n)))
-
-    fitnesses = sorted(fitnesses, key=lambda x: x[1])
-
-    results = []
-    for x in fitnesses:
-        results.append(x[0])
-
-    return results[:retain_size]
+    fit_pop = [fitness(cone,population,pop) for pop in population]
+    population = [pop for _,pop in sorted(zip(fit_pop,population), reverse = True)]
+    return population[:retain_size]
 
 print(elitism(cone, pop, 3))
 
