@@ -161,6 +161,12 @@ class Problem(O):
                 # return point
 
 
+
+cone = Problem()
+# point = cone.generate_one()
+# cone.evaluate(point)
+# print (point)
+
 def populate(problem, size):
     population = []
     # TODO 6: Create a list of points of length 'size'
@@ -174,7 +180,7 @@ def populate(problem, size):
 def crossover(mom, dad):
     # TODO 7: Create a new point which contains decisions from
     # the first half of mom and second half of dad
-    print(mom.decisions)
+    # print(mom.decisions)
     n = len(mom.decisions)
     return Point(mom.decisions[:n // 2] + dad.decisions[n // 2:])
 
@@ -196,13 +202,17 @@ def bdom(problem, one, two):
     # TODO 9: Return True/False based on the definition
     # of bdom above.
     # print(objs_one, objs_two)
-    if (objs_two[1] == objs_one[1]):
-        if (objs_one[0] <= objs_two[0]):
-            return True
-    if (objs_one[0] == objs_two[0]):
-        if (objs_one[1] <= objs_two[1]):
-            return True
-    return False
+    first = True
+    second = False
+    for i, _ in enumerate(problem.objectives):
+        if ((first is True) & gt(one.objectives[i], two.objectives[i])):
+            first = False
+        elif (not second & (one.objectives[i] is not two.objectives[i])):
+            second = True
+
+        dominates = first & second
+
+        return dominates
 
 
 def fitness(problem, population, point):
@@ -213,7 +223,7 @@ def fitness(problem, population, point):
     # For example point dominates 5 members of population,
     # then fitness of point is 5.
     for p in population:
-        if bdom(problem, p, point):
+        if bdom(problem, point, p):
             dominates += 1
     return dominates
 
@@ -223,18 +233,28 @@ def elitism(problem, population, retain_size):
     # of the points and return the top 'retain_size' points of the population
     fitnesses = []
     for n in population:
-    	fitnesses.append((n, fitness(problem, population, n)))
+        fitnesses.append((n, fitness(cone, population, n)))
 
-    fitnesses = sorted(fitnesses, key=lambda x: x[1])
+    fitnesses = sorted(fitnesses, key=lambda x: x[1], reverse = True)
 
     results = []
     for x in fitnesses:
-    	results.append(x[0])
+        results.append(x[0])
 
     return results[:retain_size]
 
-
-
+# pop = populate(cone,5)
+# print(pop)
+#
+# mom = cone.generate_one()
+# dad = cone.generate_one()
+# print(mom)
+# print(dad)
+# print(crossover(mom,dad))
+#
+# print(crossover(pop[0],pop[1]))
+# print(bdom(cone,pop[0],pop[1]))
+# print(elitism(cone, pop, 3))
 
 def ga(pop_size=100, gens=250):
     problem = Problem()
