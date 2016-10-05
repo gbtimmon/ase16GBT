@@ -3,6 +3,7 @@ import random
 
 # TODO 1: Fill in your unity ID
 __name__ = "pwang"
+tryRandom = random
 
 def kv(d):
     """
@@ -15,11 +16,11 @@ def shuffle(lst):
     """
     Shuffle a list and return it.
     """
-    random.shuffle(lst)
+    tryRandom.shuffle(lst)
     return lst
 
 ## Function to get the random value between a lower and upper bound.
-randint = random.randint
+randint = tryRandom.randint
 
 class O(object):
     """
@@ -115,7 +116,7 @@ class Machine(O):
         # TODO 3: For every transition in the list *trans, add the
         # transition to the "out" list in the "here" state
         for t in trans:
-            self.here.out.append(t)
+            t.here.out.append(t)
         pass
 
     def step(self):
@@ -147,7 +148,7 @@ class Factory(O):
         Run all the machines
         """
         print('Seed : ', seed)
-        random.seed(seed)
+        tryRandom.seed(seed)
         for _ in xrange(ticks):
             alive = False
             for machine in shuffle(self.machines):
@@ -171,9 +172,9 @@ class Factory(O):
         show = lambda x: str(x if x else '.')
         print(name, " | ", " ".join(map(show, lst)))
 
-snow_chance = 1
-grass_chance = 1
-pit_chance = 0.1
+snow_chance = 0.5
+grass_chance = 0.5
+pit_chance = 0.5
 
 def snow(m, t):
     """
@@ -184,7 +185,7 @@ def snow(m, t):
     """
     # TODO 6: If chance < snow_chance, reduce the machine's energy
     # to a random integer between [1, 5] and return True. Else return False
-    if random.random() < snow_chance:
+    if tryRandom.random() < snow_chance:
         m.data -= randint(1, 5)
         # print(m.label,m.data)
         return True
@@ -198,7 +199,7 @@ def grass(m, t):
     """
     # TODO 7: If chance < grass_chance, increase the machine's energy
     # to a random integer between [1, 5] and return True. Else return False
-    if random.random() < grass_chance:
+    if tryRandom.random() < grass_chance:
         m.data += randint(1, 5)
         print(m.label,m.data)
         return True
@@ -209,7 +210,7 @@ def pit(m, t):
     Return if chance < pit_chance.
     """
     print("in pit")
-    return random.random() < pit_chance
+    return tryRandom.random() < pit_chance
 
 
 def walk(m, t):
