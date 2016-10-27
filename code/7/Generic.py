@@ -91,7 +91,7 @@ class Kursawe(Model):
             f2 += abs(self.decisions[i])**0.8 + 5 * sin(self.decisions[i])
         return [f1,f2]
 
-#utilities
+#random jump in global space
 def neighbor(s, model):
     sn = model()
     sn.copy(s)
@@ -106,7 +106,6 @@ def neighbor(s, model):
 def simulated_annealing(model):
     def probability(en, e, T):
         p = exp(-(en - e) / (T))
-        # print(en, e, T, p)
         return p
 
     def findMinMax():
@@ -115,9 +114,7 @@ def simulated_annealing(model):
         min = max
         for i in xrange(100):
             sn = neighbor(s, model)
-            # print(sn.decisions)
             curEval = sn.sum()
-            # print(curEval)
             if curEval > max:
                 max = curEval
             elif curEval < min:
@@ -128,16 +125,13 @@ def simulated_annealing(model):
         return (eval - min) / (max - min)
 
     min, max = findMinMax()
-    # print(min, max)
     s = model()
     sb = model()
     sb.copy(s)
-
     e = energy(s.sum(), min, max)
     eb = e
     kmax = 1000
     linewidth = 50
-
     stdout.write('\n %4d : %f ,' % (1, eb))
     for k in xrange(1, kmax):
         T =  k / kmax
@@ -178,7 +172,6 @@ def maxwalksat(model):
             if sn.sum() > eLocal:
                 sLocal.copy(sn)
                 eLocal = sn.sum()
-
         return sLocal
 
     maxTries = 15
@@ -192,34 +185,22 @@ def maxwalksat(model):
         if tries == 0:
             sb.copy(s)
             eb = e
-
         for changes in xrange(0, maxChanges):
             if p < random():
                 s = neighbor(s, model)
             else:
                 direction = randint(0, s.decisionSpace - 1)
                 s = localSearch(s, direction)
-
             curSum = s.sum()
             if curSum < eb:
                 eb = curSum
                 sb.copy(s)
         print("Current Best solution: %s, " %sb.decisions,"\nf1 and f2: %s, " %sb.getObjectives(), ", at which eval the best x is found: %s" %eb )
-
     print("Best solution found: %s, " %sb.decisions,"\nf1 and f2: %s, " %sb.getObjectives(), ", at which eval the best x is found: %s" %eb )
-
-
-
 
 
 if __name__ == '__main__':
     seed(time())
-    # simulated_annealing(Schaffer)
-    # simulated_annealing(Osyczka2)
-    # simulated_annealing(Kursawe)
-    # maxwalksat(Schaffer)
-    # maxwalksat(Osyczka2)
-    # maxwalksat(Kursawe)
     for model in [Schaffer, Osyczka2, Kursawe]:
         for optimizer in [simulated_annealing, maxwalksat]:
             print("Optimizer: %s, " %optimizer.__name__,"Model: %s" %model.__name__)
