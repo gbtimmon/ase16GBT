@@ -15,3 +15,4 @@ for model in [Schaffer, Osyczka2, Kursawe]:
 [Images](img/)
 
 #Code
+[Generic.py](Generic.py)
