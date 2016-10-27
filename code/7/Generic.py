@@ -3,7 +3,7 @@ from __future__ import absolute_import, division
 from random import uniform, randint, random, seed
 from time import time
 from sys import stdout
-from math import exp
+from math import exp, sin, sqrt
 
 # model objects
 class Model(object):
@@ -51,7 +51,6 @@ class Schaffer(Model):
         f2 = (self.decisions[0] - 2) ** 2
         return [f1, f2]
 
-
 class Osyczka2(Model):
     def __init__(self):
         self.bottom=[0,0,1,0,1,0]
@@ -75,15 +74,22 @@ class Osyczka2(Model):
                 return False
         return True
 
-#functions for optimizer
-def neighbor(s, index, model):
-    sn = model()
-    sn.copy(s)
-    while True:
-        sn.decisions[index] = uniform(sn.bottom[index], sn.top[index])
-        if sn.check(): break
-    return sn
+class Kursawe(Model):
+    def __init__(self):
+        self.bottom=[-5, -5, -5, -5, -5]
+        self.top=[5, 5, 5, 5, 5]
+        self.decisionSpace=5
+        self.decisions=[0, 0, 0, 0, 0]
+        self.any()
 
+    def getObjectives(self):
+        f1=0
+        f2=0
+        for i in range(0,self.decisionSpace):
+            if i<self.decisionSpace-1:
+                f1 += - 10 * exp(-0.2 * sqrt(self.decisions[i]**2 + self.decisions[i + 1]**2))
+            f2 += abs(self.decisions[i])**0.8 + 5 * sin(self.decisions[i])
+        return [f1,f2]
 
 #optimizers
 def simulated_annealing(model):
@@ -91,6 +97,15 @@ def simulated_annealing(model):
         p = exp(-(en - e) / (T))
         # print(en, e, T, p)
         return p
+
+    def neighbor(s, index, model):
+        sn = model()
+        sn.copy(s)
+        while True:
+            sn.decisions[index] = uniform(sn.bottom[index], sn.top[index])
+            if sn.check():
+                break
+        return sn
 
     def findMinMax():
         s = model()
@@ -126,7 +141,6 @@ def simulated_annealing(model):
         T =  k / kmax
         sn = neighbor(s, randint(0, s.decisionSpace - 1), model)
         en = energy(sn.sum(), min, max)
-
         if en < eb:
             eb = en
             sb.copy(sn)
@@ -148,8 +162,12 @@ def simulated_annealing(model):
     print("Best solution: %s, " % sb.decisions, "f1 and f2: %s, " % sb.getObjectives(), "steps: %s" % kmax)
     return True
 
+# def maxwalksat(model):
+
+
 
 if __name__ == '__main__':
     seed(time())
     # simulated_annealing(Schaffer)
-    simulated_annealing(Osyczka2)
+    # simulated_annealing(Osyczka2)
+    simulated_annealing(Kursawe)
