@@ -2,12 +2,10 @@ from __future__ import print_function, unicode_literals
 from __future__ import absolute_import, division
 from random import uniform, randint, random, seed
 from time import time
-import numpy as np
 from sys import stdout
 from math import exp
-from pdb import set_trace
 
-
+# model objects
 class Model(object):
     def __init__(self):
         self.bottom = [0]
@@ -40,8 +38,6 @@ class Model(object):
                 return False
         return True
 
-
-
 class Schaffer(Model):
     def __init__(self):
         self.bottom = [-10 ** 5]
@@ -56,6 +52,30 @@ class Schaffer(Model):
         return [f1, f2]
 
 
+class Osyczka2(Model):
+    def __init__(self):
+        self.bottom=[0,0,1,0,1,0]
+        self.top=[10,10,5,6,5,10]
+        self.decisionSpace=6
+        self.decisions=[0,0,0,0,0,0]
+        self.any()
+
+    def getObjectives(self):
+        f1 = - (25 * (self.decisions[0] - 2)**2 + (self.decisions[1] - 2)**2 + ((self.decisions[2] - 1)**2) * ((self.decisions[3] - 4)**2) + (self.decisions[4] - 1)**2)
+        f2 = self.decisions[0] ** 2 + self.decisions[1] ** 2 + self.decisions[2]**2 + self.decisions[3]**2 + self.decisions[4]**2 + self.decisions[5]**2
+        return [f1, f2]
+
+    def check(self):
+        if self.decisions[0]+self.decisions[1]-2 < 0 or 6-self.decisions[0]-self.decisions[1] < 0 or 2-self.decisions[1]+self.decisions[0] < 0 \
+                or 2-self.decisions[0]+3*self.decisions[1] < 0 or 4-self.decisions[3]-(self.decisions[2]-3)**2 < 0 \
+                or (self.decisions[4]-3)**3+self.decisions[5]-4 < 0:
+            return False
+        for i in range(0,self.decisionSpace):
+            if self.decisions[i]<self.bottom[i] or self.decisions[i]>self.top[i]:
+                return False
+        return True
+
+#functions for optimizer
 def neighbor(s, index, model):
     sn = model()
     sn.copy(s)
@@ -65,6 +85,7 @@ def neighbor(s, index, model):
     return sn
 
 
+#optimizers
 def simulated_annealing(model):
     def probability(en, e, T):
         p = exp(-(en - e) / (T))
@@ -77,10 +98,12 @@ def simulated_annealing(model):
         min = max
         for i in xrange(100):
             sn = neighbor(s, randint(0, s.decisionSpace - 1), model)
+            # print(sn.decisions)
             curEval = sn.sum()
+            # print(curEval)
             if curEval > max:
                 max = curEval
-            else:
+            elif curEval < min:
                 min = curEval
         return (min, max)
 
@@ -88,6 +111,7 @@ def simulated_annealing(model):
         return (eval - min) / (max - min)
 
     min, max = findMinMax()
+    # print(min, max)
     s = model()
     sb = model()
     sb.copy(s)
@@ -127,4 +151,5 @@ def simulated_annealing(model):
 
 if __name__ == '__main__':
     seed(time())
-    simulated_annealing(Schaffer)
+    # simulated_annealing(Schaffer)
+    simulated_annealing(Osyczka2)
