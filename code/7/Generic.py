@@ -2,7 +2,7 @@ from __future__ import print_function, unicode_literals
 from __future__ import absolute_import, division
 from random import uniform, randint, random, seed
 from time import time
-from sys import stdout
+from sys import stdout, maxint
 from math import exp, sin, sqrt
 
 # model objects
@@ -91,22 +91,23 @@ class Kursawe(Model):
             f2 += abs(self.decisions[i])**0.8 + 5 * sin(self.decisions[i])
         return [f1,f2]
 
+#utilities
+def neighbor(s, model):
+    sn = model()
+    sn.copy(s)
+    while True:
+        for index in xrange(s.decisionSpace):
+            sn.decisions[index] = uniform(sn.bottom[index], sn.top[index])
+        if sn.check():
+            break
+    return sn
+
 #optimizers
 def simulated_annealing(model):
     def probability(en, e, T):
         p = exp(-(en - e) / (T))
         # print(en, e, T, p)
         return p
-
-    def neighbor(s, model):
-        sn = model()
-        sn.copy(s)
-        while True:
-            for index in xrange(s.decisionSpace):
-                sn.decisions[index] = uniform(sn.bottom[index], sn.top[index])
-            if sn.check():
-                break
-        return sn
 
     def findMinMax():
         s = model()
@@ -163,19 +164,50 @@ def simulated_annealing(model):
     print("Best solution: %s, " % sb.decisions, "f1 and f2: %s, " % sb.getObjectives(), "steps: %s" % kmax)
     return True
 
-# def maxwalksat(model):
-#
-#
-#     maxTries = 10
-#     maxChanges = 100
-#     p = 0.5
-#     for tries in xrange(1, maxTries):
-#         s = model()
-#         e = s.sum()
-#         if tries == 0:
-#             sb = model()
-#             sb.copy(s)
-#         for changes in xrange(1, maxChanges):
+def maxwalksat(model):
+    def localSearch(s, direction):
+        sn = model()
+        sn.copy(s)
+        sLocal = model()
+        sLocal.copy(sn)
+        eLocal = sLocal.sum()
+        for val in xrange(int(s.bottom[direction] / 100), int(s.top[direction] / 100)):
+            sn.decisions[direction] = val* 100
+            if not sn.check():
+                continue
+            if sn.sum() > eLocal:
+                sLocal.copy(sn)
+                eLocal = sn.sum()
+
+        return sLocal
+
+    maxTries = 15
+    maxChanges = 100
+    p = 0.5
+    sb = model()
+    eb = 0
+    for tries in xrange(0, maxTries):
+        s = model()
+        e = s.sum()
+        if tries == 0:
+            sb.copy(s)
+            eb = e
+
+        for changes in xrange(0, maxChanges):
+            if p < random():
+                s = neighbor(s, model)
+            else:
+                direction = randint(0, s.decisionSpace - 1)
+                s = localSearch(s, direction)
+
+            curSum = s.sum()
+            if curSum < eb:
+                eb = curSum
+                sb.copy(s)
+        print("Current Best solution: %s, " %sb.decisions,"\nf1 and f2: %s, " %sb.getObjectives(), ", at which eval the best x is found: %s" %eb )
+
+    print("Best solution found: %s, " %sb.decisions,"\nf1 and f2: %s, " %sb.getObjectives(), ", at which eval the best x is found: %s" %eb )
+
 
 
 
@@ -185,3 +217,10 @@ if __name__ == '__main__':
     # simulated_annealing(Schaffer)
     # simulated_annealing(Osyczka2)
     # simulated_annealing(Kursawe)
+    # maxwalksat(Schaffer)
+    # maxwalksat(Osyczka2)
+    # maxwalksat(Kursawe)
+    for model in [Schaffer, Osyczka2, Kursawe]:
+        for optimizer in [simulated_annealing, maxwalksat]:
+            print("Optimizer: %s, " %optimizer.__name__,"Model: %s" %model.__name__)
+            optimizer(model)
