@@ -98,11 +98,12 @@ def simulated_annealing(model):
         # print(en, e, T, p)
         return p
 
-    def neighbor(s, index, model):
+    def neighbor(s, model):
         sn = model()
         sn.copy(s)
         while True:
-            sn.decisions[index] = uniform(sn.bottom[index], sn.top[index])
+            for index in xrange(s.decisionSpace):
+                sn.decisions[index] = uniform(sn.bottom[index], sn.top[index])
             if sn.check():
                 break
         return sn
@@ -112,7 +113,7 @@ def simulated_annealing(model):
         max = s.sum()
         min = max
         for i in xrange(100):
-            sn = neighbor(s, randint(0, s.decisionSpace - 1), model)
+            sn = neighbor(s, model)
             # print(sn.decisions)
             curEval = sn.sum()
             # print(curEval)
@@ -137,9 +138,9 @@ def simulated_annealing(model):
     linewidth = 50
 
     stdout.write('\n %4d : %f ,' % (1, eb))
-    for k in range(1, kmax):
+    for k in xrange(1, kmax):
         T =  k / kmax
-        sn = neighbor(s, randint(0, s.decisionSpace - 1), model)
+        sn = neighbor(s, model)
         en = energy(sn.sum(), min, max)
         if en < eb:
             eb = en
@@ -163,6 +164,19 @@ def simulated_annealing(model):
     return True
 
 # def maxwalksat(model):
+#
+#
+#     maxTries = 10
+#     maxChanges = 100
+#     p = 0.5
+#     for tries in xrange(1, maxTries):
+#         s = model()
+#         e = s.sum()
+#         if tries == 0:
+#             sb = model()
+#             sb.copy(s)
+#         for changes in xrange(1, maxChanges):
+
 
 
 
@@ -170,4 +184,4 @@ if __name__ == '__main__':
     seed(time())
     # simulated_annealing(Schaffer)
     # simulated_annealing(Osyczka2)
-    simulated_annealing(Kursawe)
+    # simulated_annealing(Kursawe)
