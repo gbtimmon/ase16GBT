@@ -9,6 +9,7 @@ class Model(object):
         self.top = [0]
         self.decisionSpace = 0
         self.decisions = [0]
+        self.objectiveSpace = 0
 
     def any(self):
         while True:
