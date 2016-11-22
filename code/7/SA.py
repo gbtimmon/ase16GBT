@@ -5,12 +5,15 @@ from time import time
 from sys import stdout, maxint
 from math import exp, sin, sqrt
 from DTLZ7 import DTLZ7
+from Comparator import check_type1, check_type2
 
 def simulated_annealing(model):
+    # cooling function
     def probability(en, e, T):
         p = exp((e - en) / (T))
         return p
 
+    # base line study
     def findMinMax():
         s = model()
         max = -maxint - 1
@@ -24,9 +27,11 @@ def simulated_annealing(model):
                 min = curEval
         return (min, max)
 
+    # normalize energy
     def energy(eval, min, max):
         return (eval - min) / (max - min)
 
+    # vars
     min, max = findMinMax()
     s = model()
     sb = model()
@@ -36,16 +41,22 @@ def simulated_annealing(model):
     kmax = 1000
     linewidth = 50
     stdout.write('\n %4d : %f ,' % (1, eb))
+    prev = []
+    cur = []
+    lives = 5
+
+    # iteration through eras
     for k in xrange(1, kmax):
         T =  k / kmax
         sn = model()
         en = energy(sn.score(), min, max)
-        if en < eb:
+        #use type 1 to compare s sn and sb
+        if check_type1(sn, sb):
             eb = en
             sb.copy(sn)
             s.copy(sn)
             stdout.write('!')
-        elif en < e:
+        elif check_type1(sn, s):
             s.copy(sn)
             e = en
             stdout.write('+')
@@ -55,10 +66,23 @@ def simulated_annealing(model):
             stdout.write('?')
         else:
             stdout.write('.')
+        cur.append(en)
+
+        # when reached the end of an era
         if k % linewidth == 0:
+            #check type 2
+            if not prev:
+                prev = cur[:]
+            else:
+                lives += check_type2(prev,cur)
+                prev = cur[:]
+            if lives == 0:
+                print('\nno changing between eras, terminating program')
+                break
+            cur = []
             stdout.write('\n %4d : %f ,' % (k, eb))
     print("")
-    print("Best solution: %s, " % sb.candidates, "f1 and f2: %s, " % sb.score(), "steps: %s" % kmax)
+    print("Best solution: %s, " % sb.candidates, "\nf1 and f2: %s, " % sb.score())
     return True
 
 
