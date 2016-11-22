@@ -49,7 +49,6 @@ class DTLZ7(Model):
 
 if __name__ == "__main__":
     DTLZ7 = DTLZ7()
-    DTLZ7.any()
     print(DTLZ7.candidates)
     print(DTLZ7.fi())
     print(DTLZ7.score())
