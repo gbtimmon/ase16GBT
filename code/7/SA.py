@@ -1,9 +1,8 @@
 from __future__ import print_function, unicode_literals
 from __future__ import absolute_import, division
-from random import uniform, randint, random, seed
-from time import time
+from random import random
 from sys import stdout, maxint
-from math import exp, sin, sqrt
+from math import exp
 from DTLZ7 import DTLZ7
 from Comparator import check_type1, check_type2
 
