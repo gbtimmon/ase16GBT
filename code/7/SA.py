@@ -6,7 +6,7 @@ from math import exp
 from DTLZ7 import DTLZ7
 from Comparator import check_type1, check_type2
 
-def simulated_annealing(model):
+def SA(model):
     # cooling function
     def probability(en, e, T):
         p = exp((e - en) / (T))
@@ -82,8 +82,8 @@ def simulated_annealing(model):
             stdout.write('\n %4d : %f ,' % (k, eb))
     print("")
     print("Best solution: %s, " % sb.candidates, "\nf1 and f2: %s, " % sb.score())
-    return True
+    return sb.score
 
 
 if __name__ == "__main__":
-    simulated_annealing(DTLZ7)
+    SA(DTLZ7)
