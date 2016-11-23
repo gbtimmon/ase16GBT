@@ -1,7 +1,8 @@
 #%matplotlib inline
 # All the imports
 from __future__ import print_function, division
-from math import *
+#from math import *
+import math
 import random
 import sys
 import matplotlib.pyplot as plt
@@ -237,6 +238,30 @@ def bdom(problem, one, two):
     return dominates
 
 
+def loss1(problem, i,x,y):
+    obj = problem.objectives[i]
+    better = lt if obj.do_minimize else gt
+    return (x - y) if obj.do_minimize else (y - x)
+
+
+def expLoss(problem, i,x,y,n):
+    return math.exp( loss1(problem, i,x,y) / n)
+
+
+def loss(problem, one, two):
+    objs_one,objs_two = problem.evaluate(one), problem.evaluate(two)
+    n      = len(problem.objectives)
+    losses = [ expLoss(problem, i,onei,twoi,n)
+                 for i, (onei, twoi)
+                   in enumerate(zip(objs_one, objs_two)) ]
+    return sum(losses) / n
+
+
+def cdom(problem, one, two):
+   "one dominates two if it losses least"
+   return loss(problem, one, two) < loss(problem, two, one)
+
+
 def fitness(problem, population, point, dom_func):
     """
     Evaluate fitness of a point based on the definition in the previous block.
@@ -299,5 +324,8 @@ def plot_pareto(initial, final):
     plt.legend(loc=9, bbox_to_anchor=(0.5, -0.175), ncol=2)
     plt.show()
 
-initial, final = ga(gens=50)
+#initial, final = ga(gens=50)
+#plot_pareto(initial, final)
+
+initial, final = ga(gens=50, dom_func=cdom)
 plot_pareto(initial, final)
