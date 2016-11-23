@@ -309,6 +309,69 @@ def ga(pop_size=100, gens=250, dom_func=bdom):
     return initial_population, population
 
 
+def fast_non_dominated_sort(problem, population, dom_func=bdom):
+    fronts = []
+    for p in population:
+        first_front = []
+        p.dom_set = []
+        p.dom_count = 0
+        for q in population:
+            if(dom_func(problem, p, q)):
+                p.dom_set.append(q)
+            elif(dom_func(problem, q, p)):
+                p.dom_count += 1
+        if(p.dom_count == 0):
+            p1.rank = 0
+            first_front.append(p)
+        fronts.append(first_front)
+
+    curr = 0
+    while(curr < len(fronts)):
+        next_front = []
+        for p1 in fronts[curr]:
+            for p2 in p1.dom_set:
+                p2.dom_count -= 1
+                if(p2.dom_count == 0):
+                    p2.rank = curr + 1
+                    next_front.append(p2)
+        curr += 1
+        if(len(next_front) > 0):
+            fronts.append(next_front)
+    return fronts
+
+
+def calculate_crowding_distance(problem, population):
+    for point in population:
+        point.dist = 0.0
+    for i in len(problem.objectives):
+        min_point =  min(population, key=lambda point: point.objectives[i])
+        max_point = max(population, key=lambda point: point.objectives[i])
+        rge = max_point.objectives[i] - min_point.objectives[i]
+        population[0] = float("inf")
+        population[-1] = float("inf")
+        if(rge == 0):
+            continue
+        for j in range(1, len(population) - 1):
+            population[j].dist += (population[j+1].objectives[i] - population[j-1].objectives[i]) / rge
+
+
+def compare(a, b):
+    return (a > b) - (a < b)
+
+
+def crowded_comparison_operator(x, y):
+    if(x.rank == y.rank):
+        return compare(x.dist, y.dist)
+    return compare(x.rank, y.rank)
+
+def nsgaii(pop_size=100, gens=250, dom_func=bdom):
+    problem = POM3()
+    population = populate(problem, pop_size)
+    [problem.evaluate(point) for point in population]
+    initial_population = [point.clone() for point in population]
+
+
+
 def plot_pareto(initial, final):
     initial_objs = [point.objectives for point in initial]
     final_objs = [point.objectives for point in final]
@@ -327,5 +390,5 @@ def plot_pareto(initial, final):
 #initial, final = ga(gens=50)
 #plot_pareto(initial, final)
 
-initial, final = ga(gens=50, dom_func=cdom)
-plot_pareto(initial, final)
+#initial, final = ga(gens=50, dom_func=cdom)
+#plot_pareto(initial, final)
