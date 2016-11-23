@@ -4,7 +4,7 @@ from random import random, randint
 from DTLZ7 import DTLZ7
 from Comparator import check_type1, check_type2
 
-def MWS(model):
+def mws(model):
     #local search
     def localSearch(s, direction):
         sn = model()
@@ -73,4 +73,4 @@ def MWS(model):
 
 
 if __name__ == "__main__":
-    MWS(DTLZ7)
+    mws(DTLZ7)

@@ -6,7 +6,7 @@ from math import exp
 from DTLZ7 import DTLZ7
 from Comparator import check_type1, check_type2
 
-def SA(model):
+def sa(model):
     # cooling function
     def probability(en, e, T):
         p = exp((e - en) / (T))
@@ -86,4 +86,4 @@ def SA(model):
 
 
 if __name__ == "__main__":
-    SA(DTLZ7)
+    sa(DTLZ7)
