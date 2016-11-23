@@ -45,12 +45,11 @@ def extrapolate(frontier, one, f, cf, id, mode):
 
 def trim(val,index,mode):
     mod = mode()
-    res = val
-    while res > mod.decisions[index].hi:
-      res = res - mod.decisions[index].hi + mod.decisions[index].lo
-    while res < mod.decisions[index].lo:
-      res = mod.decisions[index].hi - (mod.decisions[index].lo - res)
-    return res
+    if val > mod.decisions[index].hi:
+      val = val % (mod.decisions[index].hi - mod.decisions[index].lo)
+    while val < mod.decisions[index].lo:
+      val = mod.decisions[index].hi - mod.decisions[index].lo + val
+    return val
 
 
 def threeOthers(frontier, avoid):
@@ -76,7 +75,7 @@ def de(mode, max_tries=100, frontier_size=50, f=0.75, cf=0.3, epsilon=0.01):
     ib = 0
     frontier = [mode() for _ in range(frontier_size)]
     prev = []
-    lives = 10
+    lives = 5
 
     # eras
     for k in range(max_tries):
