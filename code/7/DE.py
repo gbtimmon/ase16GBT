@@ -70,7 +70,7 @@ def threeOthers(frontier, avoid):
     return selected[0], selected[1], selected[2]
 
 
-def de(mode, max_tries=100, frontier_size=50, f=0.75, cf=0.3, epsilon=0.01):
+def de(mode, baseline, max_tries=100, frontier_size=50, f=0.75, cf=0.3, epsilon=0.01):
     # vars
     ib = 0
     frontier = [mode() for _ in range(frontier_size)]

@@ -4,7 +4,7 @@ from random import random, randint
 from DTLZ7 import DTLZ7
 from Comparator import check_type1, check_type2
 
-def mws(model):
+def mws(model, baseline):
     #local search
     def localSearch(s, direction):
         sn = model()
@@ -22,10 +22,11 @@ def mws(model):
         return sLocal
 
     # vars
-    maxTries = 25
-    maxChanges = 150
+    maxTries = 20
+    maxChanges = 500
     p = 0.5
     sb = model()
+    sb.candidates = baseline.candidates[:]
     eb = 0
     prev = []
     lives = 5
@@ -69,7 +70,7 @@ def mws(model):
     print("Best solution found: %s, " %sb.candidates,"\nf1 and f2: %s, " %sb.fi(), ", at which eval the best x is found: %s" %eb )
 
     #return
-    return eb
+    return sb
 
 
 if __name__ == "__main__":

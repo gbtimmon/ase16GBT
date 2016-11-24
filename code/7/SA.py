@@ -6,7 +6,7 @@ from math import exp
 from DTLZ7 import DTLZ7
 from Comparator import check_type1, check_type2
 
-def sa(model):
+def sa(model, baseline):
     # cooling function
     def probability(en, e, T):
         p = exp((e - en) / (T))
@@ -33,6 +33,7 @@ def sa(model):
     # vars
     min, max = findMinMax()
     s = model()
+    s.candidates = baseline.candidates[:]
     sb = model()
     sb.copy(s)
     e = energy(s.score(), min, max)
@@ -82,7 +83,7 @@ def sa(model):
             stdout.write('\n %4d : %f ,' % (k, eb))
     print("")
     print("Best solution: %s, " % sb.candidates, "\nf1 and f2: %s, " % sb.score())
-    return sb.score
+    return sb
 
 
 if __name__ == "__main__":
