@@ -6,6 +6,7 @@ import math
 import random
 import sys
 import matplotlib.pyplot as plt
+from operator import attrgetter
 
 # TODO 1: Enter your unity ID here
 __author__ = "magoff2"
@@ -195,7 +196,7 @@ def populate(problem, size):
     Create a Point list of length size
     """
     population = []
-    for _ in range(size):
+    for _ in xrange(size):
         population.append(problem.generate_one())
     return population
 
@@ -294,7 +295,7 @@ def ga(pop_size=100, gens=250, dom_func=bdom):
     while gen < gens:
         say(".")
         children = []
-        for _ in range(pop_size):
+        for _ in xrange(pop_size):
             mom = random.choice(population)
             dad = random.choice(population)
             while (mom == dad):
@@ -309,10 +310,23 @@ def ga(pop_size=100, gens=250, dom_func=bdom):
     return initial_population, population
 
 
+def reproduce(problem, population, pop_size):
+    children = []
+    for _ in xrange(pop_size):
+        mom = random.choice(population)
+        dad = random.choice(population)
+        while (mom == dad):
+            dad = random.choice(population)
+        child = mutate(problem, crossover(mom, dad))
+        if problem.is_valid(child) and child not in population + children:
+            children.append(child)
+    return children
+
+
 def fast_non_dominated_sort(problem, population, dom_func=bdom):
     fronts = []
+    first_front = []
     for p in population:
-        first_front = []
         p.dom_set = []
         p.dom_count = 0
         for q in population:
@@ -321,9 +335,9 @@ def fast_non_dominated_sort(problem, population, dom_func=bdom):
             elif(dom_func(problem, q, p)):
                 p.dom_count += 1
         if(p.dom_count == 0):
-            p1.rank = 0
+            p.rank = 0
             first_front.append(p)
-        fronts.append(first_front)
+    fronts.append(first_front)
 
     curr = 0
     while(curr < len(fronts)):
@@ -343,15 +357,15 @@ def fast_non_dominated_sort(problem, population, dom_func=bdom):
 def calculate_crowding_distance(problem, population):
     for point in population:
         point.dist = 0.0
-    for i in len(problem.objectives):
+    for i in xrange(len(problem.objectives)):
         min_point =  min(population, key=lambda point: point.objectives[i])
         max_point = max(population, key=lambda point: point.objectives[i])
         rge = max_point.objectives[i] - min_point.objectives[i]
-        population[0] = float("inf")
-        population[-1] = float("inf")
+        population[0].dist = float("inf")
+        population[-1].dist = float("inf")
         if(rge == 0):
             continue
-        for j in range(1, len(population) - 1):
+        for j in xrange(1, len(population) - 1):
             population[j].dist += (population[j+1].objectives[i] - population[j-1].objectives[i]) / rge
 
 
@@ -364,12 +378,46 @@ def crowded_comparison_operator(x, y):
         return compare(x.dist, y.dist)
     return compare(x.rank, y.rank)
 
+def select_parents(problem, fronts, pop_size):
+    [calculate_crowding_distance(problem, front) for front in fronts]
+    offspring = []
+    last_front = 0
+    for front in fronts:
+        if((len(offspring) + len(front)) > pop_size):
+            break
+        for point in front:
+            offspring.append(point)
+        last_front += 1
+    remaining = pop_size - len(offspring)
+    if(remaining > 0):
+        fronts[last_front].sort(cmp=crowded_comparison_operator)
+        offspring += fronts[last_front][0:remaining]
+    return offspring
+
+
 def nsgaii(pop_size=100, gens=250, dom_func=bdom):
     problem = POM3()
     population = populate(problem, pop_size)
     [problem.evaluate(point) for point in population]
     initial_population = [point.clone() for point in population]
-
+    fast_non_dominated_sort(problem, population, dom_func)
+    children = reproduce(problem, population, pop_size)
+    [problem.evaluate(child) for child in children]
+    gen=0
+    while gen < gens:
+        say(".")
+        union = population + children
+        fronts = fast_non_dominated_sort(problem, union, dom_func)
+        parents = select_parents(problem, fronts, pop_size)
+        pop = children
+        children = reproduce(problem, parents, pop_size)
+        [problem.evaluate(child) for child in children]
+        gen += 1
+    union = pop + children
+    fronts = fast_non_dominated_sort(problem, union, dom_func)
+    parents = select_parents(problem, fronts, pop_size)
+    print("")
+    return initial_population, parents
 
 
 def plot_pareto(initial, final):
@@ -392,3 +440,6 @@ def plot_pareto(initial, final):
 
 #initial, final = ga(gens=50, dom_func=cdom)
 #plot_pareto(initial, final)
+
+initial, final = nsgaii(gens=50)
+plot_pareto(initial, final)
