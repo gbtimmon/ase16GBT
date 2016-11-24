@@ -5,6 +5,8 @@ from math import *
 import random
 import sys
 import matplotlib.pyplot as plt
+from de import de
+from DTLZ7 import DTLZ7
 
 # TODO 1: Enter your unity ID here 
 __author__ = "latimko"
@@ -244,7 +246,9 @@ print(elitism(cone, pop, 3))
 
 def ga(pop_size = 100, gens = 250):
     problem = Problem()
-    population = populate(problem, pop_size)
+    print("\nhello")
+    population = de(mode=DTLZ7, max_tries=gens, frontier_size=pop_size)
+    #population = populate(problem, pop_size)
     [problem.evaluate(point) for point in population]
     initial_population = [point.clone() for point in population]
     gen = 0 
@@ -281,4 +285,4 @@ def plot_pareto(initial, final):
     plt.show()
     
 initial, final = ga()
-#plot_pareto(initial, final)
+plot_pareto(initial, final)
