@@ -82,18 +82,29 @@ DE/rand/1 has been used in this practice.
 
 ### Type1 Comparison
 
-Type 1 operator compares the domination of an individual solution over other. To establish dominance, it compares median performance scores provided by the model. The summation of each objective has been used as the performance score. 
+Type 1 operator was implemented to compare the domination of an individual solution over other. To establish dominance, it compares median performance scores provided by the model. The summation of each objective has been used as the performance score. 
 
 ### Type2
 
-Type2 operator is used to compare two sets of eras (list of candidate solutions). This operator can be used to get a measure of how different one era is from the other and conclude if the changes in the eras are significant enough to keep running the algorithm or terminate the algorithm early. The operator takes the current era and the previous era to calculate the difference between the two. The difference between the eras is calculated using Krall’s B Stop method to know how to increment/ decrement eras. We have a threshold value of era and the operator returns an increment or decrement value depending on whether the eras we different by a certain percent. Early termination for the algorithm happens when the era count reaches zero. To calculate the difference between the eras we use A12, from Vargha and Delaney’s A12 statistic. The statistic also provides literature that supports a difference of 56% is needed for eras to be significantly different.
+Type2 operator was implemented to compare two sets of eras. It was used to measure of how different one era is from the other. The operator takes the current era and the previous era to calculate the difference between the two. Early termination for the algorithm happens when the optimizer runs out of lives. A12 was used To calculate the difference between eras. the A12 statistics measures the
+probability that running algorithm *X* yields higher values than running another algorithm *Y*.According to Vargha and Delaney, a small, medium, large difference between two populations is:
+
+-   *large* if `a12` is over 71%;
+-   *medium* if `a12` is over 64%;
+-   *small* if `a12` is 56%, or less.  [1]
+
+Here we consider a small effect so we set threshold to 0.56.
 
 ```
-    * Sort the values for that objective in _era_ and _era+1_
-    * Run the fast _a12_ test to check for true difference
+    * Sort the values for solutions in era and era - 1
+    * Run A12 test to check for difference
     * if improvement > 0.56
-        * give 5 more lives
-    * If no improvement on anything,
-         * Lives - 1
+        * add 5 more lives
+    * else
+         * reduce 1 life
 ```
 
+
+
+## Reference
+[1] https://github.com/txt/ase16/blob/master/src/stats.py
