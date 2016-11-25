@@ -3,7 +3,6 @@ from __future__ import print_function, unicode_literals
 from math import pi, fabs, sin
 from Model import Model, Decisions
 
-
 class DTLZ7(Model):
     def __init__(self, decisionSpace=10, objectiveSpace=2):
         self.decisions = []

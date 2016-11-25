@@ -139,11 +139,47 @@ class Problem(O):
         	if Problem.is_valid(point):
         		return point
         	return point
-        	
+  
 cone = Problem()
 point = cone.generate_one()
 cone.evaluate(point)
 print(point)
+
+
+class Prob(O):
+    """
+    Class representing the cone problem.
+    """
+    def __init__(self, decisions=[Decision('r',0,10), Decision('h', 0, 20)], objectives=[Objective('S'), Objective('T')], decisionSpace=10, objectiveSpace=2):
+        O.__init__(self)
+        self.decisions = decisions
+        self.objectives = objectives
+        
+    @staticmethod
+    def evaluate(point):
+        [r, h] = point.decisions
+        l = (r**2 + h**2)**0.5
+        S = pi * r * l
+        T = S + pi * r**2
+        point.objectives = [S, T]
+        # TODO 3: Evaluate the objectives S and T for the point.
+        return point.objectives
+    
+    @staticmethod
+    def is_valid(point):
+        [r, h] = point.decisions
+        # TODO 4: Check if the point has valid decisions
+        V = pi*(r**2)*h/3
+        return V > 200
+    
+    def generate_one(self):
+        # TODO 5: Generate a valid instance of Point.
+        while(True):
+        	point = Point([random_value(d.low, d.high) for d in self.decisions])
+        	if Problem.is_valid(point):
+        		return point
+        	return point
+
 
 def populate(problem, size):
     population = []
@@ -247,8 +283,13 @@ print(elitism(cone, pop, 3))
 def ga(pop_size = 100, gens = 250):
     problem = Problem()
     print("\nhello")
-    population = de(mode=DTLZ7, max_tries=gens, frontier_size=pop_size)
-    #population = populate(problem, pop_size)
+    frontier = de(mode=DTLZ7, max_tries=gens, frontier_size=pop_size)
+    for front in frontier.decisions:
+    		print(front.hi)
+    objecti = frontier.fi()
+    print(objecti)
+	
+    population = populate(problem, pop_size)
     [problem.evaluate(point) for point in population]
     initial_population = [point.clone() for point in population]
     gen = 0 
