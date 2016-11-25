@@ -13,14 +13,15 @@ Simulated annealing optimizes model by keeping state of 3 different candidates w
 ```
 * A baseline study to find minimum and maximum points
 * while still have lives and does not run out of generations
-   * Type 1 comparison is performed between the best solution and the new candidates
-      * If the new candidate is better, update best solution and the last solution
-   * Type 1 comparison is performed between the last solution and the new candidates
-      * If the new candidate is better, update the last solution
-   * After the era size
-      * Type2 comparison between era and era - 1
-      * If no changing detected, reduce lives left
-      * else, give more lives
+    * generate new candidate
+    * Type 1 comparison is performed between the best solution and the new candidates
+        * If the new candidate is better, update best solution and the last solution
+    * Type 1 comparison is performed between the last solution and the new candidates
+        * If the new candidate is better, update the last solution
+    * After the era size
+        * Type2 comparison between era and era - 1
+        * If no changing detected, reduce lives left
+        * else, give more lives
 ```
 
 ### Max-WalkSat
@@ -28,21 +29,18 @@ MaxWalkSat is a non-parametric stochastic method for landscape sampling sampling
 
 
 ```
-* while number of tries is less than retries
+* while still have lives and number of tries is less than retries
     * A new candidate is generated
-    * for each iteration of max_changes
-        * the energy is checked with best solution - type 1
-            * If found then returned
+    * while number of changes is less than maximum changes
         * If mutation_prob satisfied
-            * One of the decisions is mutated
+            * One of the decisions is randomly mutated
         * If not 
-            * one of the decision is maximized for a step size
-            * type 1 comparison to find a local best
+            * local search with type1 comparison to maximize one of the directions
+        * Type 1 comparison is performed between the best solution and the new candidates
+            * If the new candidate is better, update best solution
     * After the era size
         * Type2 comparison between era and era - 1
-    * Exit 
-        * if ran out of lives
-        * if optimum energy is reached
-        * if ran out of tries
+        * If no changing detected, reduce lives left
+        * else, give more lives
 ```
 
