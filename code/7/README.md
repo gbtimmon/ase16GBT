@@ -48,6 +48,8 @@ MaxWalkSat is a non-parametric stochastic method for landscape sampling sampling
 ### Differential Evolution
 Differential evolution is a multi-objective optimizer. It optimizes a problem by maintaining a population of candidate solutions and improving it. DE optimizes a problem by treating it as a black box and only use the quality measurement provided by the candidates so the gradient is not needed. Compared with the former two optimizers, it can search very large spaces of candidate solutions.
 
+DE/rand/1 has been used in this practice.
+
 * DE
 ```
 * Generate an frontier that contains a size of initial candidates
@@ -78,6 +80,20 @@ Differential evolution is a multi-objective optimizer. It optimizes a problem by
          * assign one decision from two to one
 ```
 
+### Type1 Comparison
 
+Type 1 operator compares the domination of an individual solution over other. To establish dominance, it compares median performance scores provided by the model. The summation of each objective has been used as the performance score. 
 
+### Type2
+
+Type2 operator is used to compare two sets of eras (list of candidate solutions). This operator can be used to get a measure of how different one era is from the other and conclude if the changes in the eras are significant enough to keep running the algorithm or terminate the algorithm early. The operator takes the current era and the previous era to calculate the difference between the two. The difference between the eras is calculated using Krall’s B Stop method to know how to increment/ decrement eras. We have a threshold value of era and the operator returns an increment or decrement value depending on whether the eras we different by a certain percent. Early termination for the algorithm happens when the era count reaches zero. To calculate the difference between the eras we use A12, from Vargha and Delaney’s A12 statistic. The statistic also provides literature that supports a difference of 56% is needed for eras to be significantly different.
+
+```
+    * Sort the values for that objective in _era_ and _era+1_
+    * Run the fast _a12_ test to check for true difference
+    * if improvement > 0.56
+        * give 5 more lives
+    * If no improvement on anything,
+         * Lives - 1
+```
 
