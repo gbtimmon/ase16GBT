@@ -1,8 +1,9 @@
 # Comparison of Simulated Annealing, MaxWalkSat, and Differential Evolution with DTLZ7 as the model
 
 ## Abstract
-Conventional methods arrive at optimal solution by compairng all the possible candidate solutions, which cause the time complexity grows   exponentially with the size of the data.
-<br>This practice attempts to compare the performance of Simulated Annealing, MaxWalkSat, and Differential Evolution by running them on the DTLZ7 model with 10 decision variables and 2 objective functions. To compare the performance among the optimizers, statistical machinery like bootstrapping, a12, and Scott-Knott were used.
+Conventional methods arrive at optimal solution by compairng all the possible candidate solutions, which cause the time complexity grows   exponentially with the size of the data. In this report, three metaheuristics approaches has been discussed and compared. They can quickly provide a solution and continuously improve it. Those approaches do not guarantee an optimal solution is ever found.
+<br>This practice attempts to compare the performance of Simulated Annealing, MaxWalkSat, and Differential Evolution by running them on the DTLZ7 model with 10 decision variables and 2 objective functions. 
+<br>To compare the performance among the optimizers, statistical machinery like bootstrapping, a12, and Scott-Knott were used. 
 
 ## Introduction
 In this section, all the algorithms used in this experiment has been described and discussed. They are **Simulated annealing**, **Max-WalkSat**, **Differential Evolution**,  **3 Types of Comparison**
@@ -43,4 +44,40 @@ MaxWalkSat is a non-parametric stochastic method for landscape sampling sampling
         * If no changing detected, reduce lives left
         * else, give more lives
 ```
+
+### Differential Evolution
+Differential evolution is a multi-objective optimizer. It optimizes a problem by maintaining a population of candidate solutions and improving it. DE optimizes a problem by treating it as a black box and only use the quality measurement provided by the candidates so the gradient is not needed. Compared with the former two optimizers, it can search very large spaces of candidate solutions.
+
+* DE
+```
+* Generate an frontier that contains a size of initial candidates
+* while still have lives and does not run out of generations
+    * update the current frontier
+    * After the era size
+        * Type2 comparison between era and era - 1
+        * If no changing detected, reduce lives left
+        * else, give more lives
+```
+
+* Update frontier
+```
+* for each candidate in frontier
+    * extrapolate candidate
+    * Type 1 comparison is performed between the candidate in frontier and the new candidates
+         * If the new candidate is better, update the frontier
+* return frontier and cur ear scores
+```
+
+* extrapolate
+```
+* picks 3 different random candidates: two three, and four from frontierand 
+* while the new candidate is not legal
+   * for each decision
+         * mutates the decision with two, three and four based on a cross over factor with a possibility
+   * if all the decisions remain the same
+         * assign one decision from two to one
+```
+
+
+
 
