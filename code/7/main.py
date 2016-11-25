@@ -12,7 +12,7 @@ if __name__ == '__main__':
         data = []
         baseline = [model() for _ in xrange(repeats)]
         for i,optimizer in enumerate([sa,mws,de]):
-        # for i,optimizer in enumerate([de]):
+        # for i,optimizer in enumerate([sa]):
             opt_rpt = []
             opt_rpt.append(optimizer.func_name)
             for j in range(repeats):

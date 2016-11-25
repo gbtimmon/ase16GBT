@@ -2,7 +2,7 @@ from __future__ import print_function, unicode_literals
 from __future__ import absolute_import, division
 from random import random
 from sys import stdout, maxint
-from math import exp
+from math import exp, fabs
 from DTLZ7 import DTLZ7
 from Comparator import check_type1, check_type2
 
@@ -10,33 +10,38 @@ def sa(model, baseline):
     # cooling function
     def probability(en, e, T):
         p = exp((e - en) / (T))
+        # if en < 0: en  = -en
+        # if e < 0: e = -e
+        # total = max(e, en)
+        # p = exp(-(((en-e)/total)/T**3))
         return p
 
     # base line study
     def findMinMax():
         s = model()
-        max = -maxint - 1
+        Localmax = -maxint - 1
         min = maxint
-        for i in xrange(100):
+        for i in xrange(1000):
             sn = model()
             curEval = sn.score()
-            if curEval > max:
-                max = curEval
+            if curEval > Localmax:
+                Localmax = curEval
             elif curEval < min:
                 min = curEval
-        return (min, max)
+        return (min, Localmax)
 
     # normalize energy
     def energy(eval, min, max):
         return (eval - min) / (max - min)
 
     # vars
-    min, max = findMinMax()
+    min, localMax = findMinMax()
+    # print(min, max)
     s = model()
     s.candidates = baseline.candidates[:]
     sb = model()
     sb.copy(s)
-    e = energy(s.score(), min, max)
+    e = energy(s.score(), min, localMax)
     eb = e
     kmax = 1000
     linewidth = 50
@@ -47,10 +52,12 @@ def sa(model, baseline):
 
     # iteration through eras
     for k in xrange(1, kmax):
-        T =  k / kmax
+        T = (k * 6 / kmax)
         sn = model()
-        en = energy(sn.score(), min, max)
+        en = energy(sn.score(), min, localMax)
         #use type 1 to compare s sn and sb
+        p = probability(en, e, T)
+        q = random()
         if check_type1(sn, sb):
             eb = en
             sb.copy(sn)
@@ -60,7 +67,8 @@ def sa(model, baseline):
             s.copy(sn)
             e = en
             stdout.write('+')
-        elif probability(en, e, T) < random():
+        elif p < q:
+            # print(p, q)
             s.copy(sn)
             e = en
             stdout.write('?')
@@ -87,4 +95,4 @@ def sa(model, baseline):
 
 
 if __name__ == "__main__":
-    sa(DTLZ7)
+    sa(DTLZ7, DTLZ7())
