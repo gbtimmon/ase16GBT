@@ -5,13 +5,7 @@ from stats import a12
 
 
 def check_type1(X, Y):
-    x_list = X.fi()
-    y_list = Y.fi()
-    for i, (Xi, Yi) in enumerate(zip(x_list, y_list)):
-        if Xi >= Yi:
-            return False
-
-    return True
+    return X.score() < Y.score()
 
 
 '''
