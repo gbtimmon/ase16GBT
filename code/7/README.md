@@ -2,8 +2,10 @@
 
 ## Abstract
 Conventional methods arrive at optimal solution by compairng all the possible candidate solutions, which cause the time complexity grows   exponentially with the size of the data. In this report, three metaheuristics approaches has been discussed and compared. They can quickly provide a solution and continuously improve it. Those approaches do not guarantee an optimal solution is ever found.
-<br>This practice attempts to compare the performance of Simulated Annealing, MaxWalkSat, and Differential Evolution by running them on the DTLZ7 model with 10 decision variables and 2 objective functions. 
-<br>To compare the performance among the optimizers, statistical machinery like bootstrapping, a12, and Scott-Knott were used. 
+
+This practice attempts to compare the performance of Simulated Annealing, MaxWalkSat, and Differential Evolution by running them on the DTLZ7 model with 10 decision variables and 2 objective functions. 
+
+To compare the performance among the optimizers, statistical machinery like bootstrapping, a12, and Scott-Knott were used. 
 
 ## Introduction
 In this section, all the algorithms used in this experiment has been described and discussed. They are **Simulated annealing**, **Max-WalkSat**, **Differential Evolution**,  **3 Types of Comparison**
@@ -99,10 +101,11 @@ Here we consider a small effect so we set threshold to 0.56.
     * Sort the values for solutions in era and era - 1
     * Run A12 test to check for difference
     * if improvement > 0.56
-        * add 5 more lives
+         * add 5 more lives
     * else
          * reduce 1 life
 ```
+
 
 
 
