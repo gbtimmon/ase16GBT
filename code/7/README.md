@@ -1,11 +1,11 @@
-# Comparison of Simulated Annealing, MaxWalkSat, and Differential Evolution with DTLZ7 as the model
+# Early Termination of Simulated Annealing, MaxWalkSat, and Differential Evolution with DTLZ7 as the model
 
 ## Abstract
 Conventional methods arrive at optimal solution by compairng all the possible candidate solutions, which cause the time complexity grows   exponentially with the size of the data. In this report, three metaheuristics approaches has been discussed and compared. They can quickly provide a solution and continuously improve it. Those approaches do not guarantee an optimal solution is ever found.
 
-This practice attempts to compare the performance of Simulated Annealing, MaxWalkSat, and Differential Evolution by running them on the DTLZ7 model with 10 decision variables and 2 objective functions. 
+This practice attempts to used 3 types of comparison operators to early terminate Simulated Annealing, MaxWalkSat, and Differential Evolution by running them on the DTLZ7 model with 10 decision variables and 2 objective functions. A comparison of the three optimizer will be discussed as well. 
 
-To compare the performance among the optimizers, statistical machinery like bootstrapping, a12, and Scott-Knott were used. 
+To compare the performance among and inside the optimizers, statistical machinery like bootstrapping, a12, and Scott-Knott were used. 
 
 ## Introduction
 In this section, all the algorithms used in this experiment has been described and discussed. They are **Simulated annealing**, **Max-WalkSat**, **Differential Evolution**,  **3 Types of Comparison**
@@ -86,7 +86,7 @@ DE/rand/1 has been used in this practice.
 
 Type 1 operator was implemented to compare the domination of an individual solution over other. To establish dominance, it compares median performance scores provided by the model. The summation of each objective has been used as the performance score. 
 
-### Type2
+### Type2 Comparison
 
 Type2 operator was implemented to compare two sets of eras. It was used to measure of how different one era is from the other. The operator takes the current era and the previous era to calculate the difference between the two. Early termination for the algorithm happens when the optimizer runs out of lives. A12 was used To calculate the difference between eras. the A12 statistics measures the
 probability that running algorithm *X* yields higher values than running another algorithm *Y*.According to Vargha and Delaney, a small, medium, large difference between two populations is:
@@ -97,7 +97,7 @@ probability that running algorithm *X* yields higher values than running another
 
 Here we consider a small effect so we set threshold to 0.56.
 
-```
+```3
     * Sort the values for solutions in era and era - 1
     * Run A12 test to check for difference
     * if improvement > 0.56
@@ -105,6 +105,18 @@ Here we consider a small effect so we set threshold to 0.56.
     * else
          * reduce 1 life
 ```
+
+### Type3 Comparison
+
+Type3 operator was implemented to compare the final eras between multiple optimizers. 1000 bootstraps was used with A12 and s. The rdivdemo program creates graphs which show the median, the inter quartile range and the 25 %ile , 50 %ile amd 70 % ile values .
+
+```
+    *  run Simulated Annealing, MaxWalkSat, and Differential Evolution for 20 repeats
+        * For each repeat
+             * Run each optimizer and save the cdom loss between era0 the final era
+    Statistical Analysis of Scott-Knott,a12 and rank the optimizers
+```
+
 
 
 
