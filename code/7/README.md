@@ -3,15 +3,15 @@
 ## Abstract
 Conventional methods arrive at optimal solution by compairng all the possible candidate solutions, which cause the time complexity grows   exponentially with the size of the data. In this report, three metaheuristics approaches has been discussed and compared. They can quickly provide a solution and continuously improve it. Those approaches do not guarantee an optimal solution is ever found.
 
-This practice attempts to used 3 types of comparison operators to early terminate Simulated Annealing, MaxWalkSat, and Differential Evolution by running them on the DTLZ7 model with 10 decision variables and 2 objective functions. A comparison of the three optimizer will be discussed as well. 
+This practice attempts to use 3 types of comparison operators to early terminate Simulated Annealing, MaxWalkSat, and Differential Evolution by running them on the DTLZ7 model with 10 decision variables and 2 objective functions. A comparison of the three optimizers will be discussed as well. 
 
 To compare the performance among and inside the optimizers, statistical machinery like bootstrapping, a12, and Scott-Knott were used. 
 
 ## Introduction
-In this section, all the algorithms used in this experiment has been described and discussed. They are **Simulated annealing**, **Max-WalkSat**, **Differential Evolution**,  **3 Types of Comparison**
+In this section, all the algorithms used in this experiment has been described and discussed. They are **Simulated annealing**, **Max-WalkSat**, **Differential Evolution**,  **3 Types of Comparison**, **Scott-knott**
 
 ### Simulated Annealing
-Simulated annealing optimizes model by keeping state of 3 different candidates which include best solution, last solution and current solution. It works by making random jumps across the decision space and comparing to the last solution as well as the best solution. With a cooling function that decreases the possibility to jump to a point that is lower optimized when the number of generation increases, Simulated Annealing jumps to sub-optimal solutions. The idea behind this is that jumping out of the local best solution trap and moving towards a globally optimal solution in later iterations.
+Simulated annealing optimizes model by keeping state of 3 different candidates which include best solution, last solution and current solution. It works by making random jumps across the decision space and comparing to the last solution as well as the best solution. Simulated Annealing jumps to sub-optimal solutions with a cooling function that decreases the possibility when the number of generation increases. The idea behind this is that jumping out of the local best solution trap and moving towards a globally optimal solution in later iterations.
 
 ```
 * A baseline study to find minimum and maximum points
@@ -117,9 +117,33 @@ Type3 operator was implemented to compare the final eras between multiple optimi
     Statistical Analysis of Scott-Knott,a12 and rank the optimizers
 ```
 
+### Scott-knott
 
+The Scott & Knott method make use of a cluster analysis algorithm, where, starting from the whole group of observed mean effects, it divides, and keep dividing the sub-groups in such a way that the intersection of any two groups formed in that manner is empty [2]
+
+## Results
+
+### Counts of Earlty termination
+| Optimizer | Number of  early terminations  |
+|-----------|--------------------------------|
+| SA        | 9                              |
+| MWS       | 16                             |
+| DE        | 20                             |
+
+As shown in the table, Simulated Annealing has the lowest number of early termination, which suggests that the algorithm takes more time to search and find the best result. On the other hand, Differential Evolution has every try early terminated. As the only algorithm keeping a population frontier, it is highly efficient in searching the landscape.
+
+### Comparison of three optimizers depending on the cdom loss
+
+rank ,         name ,    med   ,  iqr 
+----------------------------------------------------
+   1 ,           sa ,    3.85  ,  4.54 (   ---*----    |              ), 2.23,  4.11,  6.77
+   1 ,          mws ,    4.37  ,  3.91 (    ---*---    |              ), 3.04,  4.50,  6.95
+   2 ,           de ,    8.14  ,  7.89 (        ------*|-------       ), 5.11,  8.32,  12.99
+   
 
 
 
 ## Reference
 [1] https://github.com/txt/ase16/blob/master/src/stats.py
+[2] https://rdrr.io/cran/ScottKnott/man/ScottKnott-package.html
+
