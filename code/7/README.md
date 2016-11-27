@@ -130,20 +130,27 @@ The Scott & Knott method make use of a cluster analysis algorithm, where, starti
 | MWS       | 16                             |
 | DE        | 20                             |
 
-As shown in the table, Simulated Annealing has the lowest number of early termination, which suggests that the algorithm takes more time to search and find the best result. On the other hand, Differential Evolution has every try early terminated. As the only algorithm keeping a population frontier, it is highly efficient in searching the landscape.
+As shown in the table, Simulated Annealing has the lowest number of early termination, which suggests that the algorithm takes the most generation to search and find the best result. On the other hand, Differential Evolution has every try early terminated. As the only algorithm keeping a population frontier, it is highly efficient in searching the landscape.
 
 ### Comparison of three optimizers depending on the cdom loss
-
+```
 rank ,         name ,    med   ,  iqr 
 ----------------------------------------------------
    1 ,           sa ,    3.85  ,  4.54 (   ---*----    |              ), 2.23,  4.11,  6.77
    1 ,          mws ,    4.37  ,  3.91 (    ---*---    |              ), 3.04,  4.50,  6.95
    2 ,           de ,    8.14  ,  7.89 (        ------*|-------       ), 5.11,  8.32,  12.99
    
+```
 
+As shown in the table, Differential Evolution works best on DTLZ 7 with 2 objectives and 10 decisions followed by Max-WalkSat then Simulated Annealing. Since we are comparing continuous domination loss numbers generated between the first era and final era, this indicates that DE produces the best loss.
 
+## Threats to Validity
+
+## Future Work
+
+## Conclusion
 
 ## Reference
 [1] https://github.com/txt/ase16/blob/master/src/stats.py
-[2] https://rdrr.io/cran/ScottKnott/man/ScottKnott-package.html
+<br>[2] https://rdrr.io/cran/ScottKnott/man/ScottKnott-package.html
 
