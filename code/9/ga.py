@@ -288,8 +288,10 @@ def ga(pop_size = 100, gens = 250):
     		print(front.hi)
     objecti = frontier.fi()
     print(objecti)
-	
-    population = populate(problem, pop_size)
+    
+    temp = Prob(decisions=frontier.decisions, objectives=objecti)
+    population = temp
+    #population = populate(problem, pop_size)
     [problem.evaluate(point) for point in population]
     initial_population = [point.clone() for point in population]
     gen = 0 
