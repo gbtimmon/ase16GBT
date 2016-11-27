@@ -271,8 +271,7 @@ def elitism(problem, population, retain_size, dom_func):
     return population[:retain_size]
 
 
-def ga(pop_size=100, gens=250, dom_func=bdom):
-    problem = POM3()
+def ga(pop_size=100, gens=250, dom_func=bdom, problem=POM3):
     population = populate(problem, pop_size)
     [problem.evaluate(point) for point in population]
     initial_population = [point.clone() for point in population]

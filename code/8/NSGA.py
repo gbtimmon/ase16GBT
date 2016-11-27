@@ -1,13 +1,10 @@
 #%matplotlib inline
 # All the imports
 from __future__ import print_function, division
-#from math import *
-import math
-import random
-import sys
 import matplotlib.pyplot as plt
-from operator import attrgetter
+import os.path
 from Model import *
+from DTLZ import *
 
 
 def reproduce(problem, population, pop_size):
@@ -95,17 +92,14 @@ def select_parents(problem, fronts, pop_size):
     return offspring
 
 
-def nsgaii(pop_size=100, gens=250, dom_func=bdom):
-    from DTLZ import DTLZ1
-    # problem = POM3()
-    problem = DTLZ1(4, 20)
+def nsgaii(pop_size=100, gens=250, dom_func=bdom, problem=DTLZ1):
     population = populate(problem, pop_size)
     [problem.evaluate(point) for point in population]
     initial_population = [point.clone() for point in population]
     fast_non_dominated_sort(problem, population, dom_func)
     children = reproduce(problem, population, pop_size)
     #[problem.evaluate(child) for child in children]
-    gen=0
+    gen = 0
     while gen < gens:
         say(".")
         union = population + children
@@ -119,7 +113,7 @@ def nsgaii(pop_size=100, gens=250, dom_func=bdom):
     fronts = fast_non_dominated_sort(problem, union, dom_func)
     parents = select_parents(problem, fronts, pop_size)
     print("")
-    return initial_population, parents, problem
+    return initial_population, parents
 
 
 def plot_pareto(initial, final):
@@ -137,23 +131,38 @@ def plot_pareto(initial, final):
     plt.legend(loc=9, bbox_to_anchor=(0.5, -0.175), ncol=2)
     plt.show()
 
-#initial, final = ga(gens=50)
-#plot_pareto(initial, final)
 
-#initial, final = ga(gens=50, dom_func=cdom)
-#plot_pareto(initial, final)
+def write_results(filename, problem, final):
+    f = open(filename, 'w')
+    for i in xrange(len(problem.objectives)):
+        f.write(problem.objectives[i].name + "\n")
+        for j in xrange(len(final)):
+            f.write("{0} ".format(problem.objectives[i].normalize(final[j].objectives[i])))
+        f.write("\n")
+    f.close()
 
-initial, final, problem = nsgaii(gens=50)
+try:
+    os.mkdir('results')
+except Exception:
+    pass
 
-f = open('a.out', 'w')
+initial, final = ga(gens=50, problem=DTLZ1())
+write_results('results/GA_DTLZ1.out', DTLZ1(), final)
 
-for i in xrange(len(problem.objectives)):
-    f.write(problem.objectives[i].name + "\n")
-    for j in xrange(len(final)):
-        f.write("{0} ".format(problem.objectives[i].normalize(final[j].objectives[i])))
-    f.write("\n")
-f.close()
+initial, final = nsgaii(gens=50, problem=DTLZ1())
+write_results('results/NSGA_DTLZ1.out', DTLZ1(), final)
 
+# initial, final = ga(gens=50, problem=POM3())
+# write_results('results/GA_POM3.out', POM3(), final)
+
+initial, final = ga(gens=50, problem=DTLZ3())
+write_results('results/GA_DTLZ3.out', DTLZ3(), final)
+
+initial, final = ga(gens=50, problem=DTLZ5())
+write_results('results/GA_DTLZ5.out', DTLZ5(), final)
+
+initial, final = ga(gens=50, problem=DTLZ7())
+write_results('results/GA_DTLZ7.out', DTLZ7(), final)
 
 plot_pareto(initial, final)
 
