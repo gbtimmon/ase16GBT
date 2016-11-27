@@ -9,7 +9,7 @@ from Comparator import check_type1, check_type2
 def sa(model, baseline):
     # cooling function
     def probability(en, e, T):
-        p = exp((e - en) / (T))
+        p = exp((e - en) / T)
         # if en < 0: en  = -en
         # if e < 0: e = -e
         # total = max(e, en)

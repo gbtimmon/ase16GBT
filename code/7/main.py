@@ -17,7 +17,9 @@ if __name__ == '__main__':
             opt_rpt.append(optimizer.func_name)
             for j in range(repeats):
                 print "\nStarting Model = %s Optimizer = %s Repeat No = %s \n" % ("DTLZ7",str(optimizer.__name__),str(j+1))
+                pre = model()
+                pre.copy(baseline[j])
                 res = optimizer(model, baseline[j])
-                opt_rpt.append(res.score())
+                opt_rpt.append(res.cdom(pre))
             data.append(opt_rpt)
         rdivDemo(data)

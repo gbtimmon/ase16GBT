@@ -45,6 +45,17 @@ class DTLZ7(Model):
         # return
         return objectives
 
+    def cdom(self, other):
+        def loss(xl, yl):
+            n = len(xl)
+            allloss = [pow((xi-yi)/n,2) for xi,yi in zip(xl,yl)]
+            return sum(allloss)/n
+
+        x_objs = self.fi()
+        y_objs = other.fi()
+        print(x_objs)
+        print(y_objs)
+        return loss(x_objs, y_objs)
 
 
 if __name__ == "__main__":
