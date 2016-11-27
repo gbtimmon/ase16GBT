@@ -1,6 +1,5 @@
 from __future__ import print_function, unicode_literals
 from __future__ import division
-from DTLZ7 import DTLZ7
 from random import random, randint
 from Comparator import check_type1, check_type2
 
