@@ -33,3 +33,7 @@
 
 #mac file
 .DS_Store
+
+.idea/ase16GBT.iml
+.idea/modules.xml
+.idea/workspace.xml
