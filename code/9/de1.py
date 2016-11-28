@@ -1,14 +1,39 @@
 from __future__ import print_function, unicode_literals
 from __future__ import division
-from random import random, randint
+from math import pi, fabs, sin
 from DTLZ import DTLZ1
-from Comparator import check_type1, check_type2
 
+def populate(problem, size):
+    population = []
+    # TODO 6: Create a list of points of length 'size'
+    for _ in xrange(size):
+    	population.append(problem.generate_one())
+    return population
+    
+def check_type1_1(X, Y):
+    return X.score() < Y.score()
+    
+def update_1(mod, f, cf, frontier):
+    cur = []
+    for x in enumerate(frontier):
+        s = x.score()
+        new = extrapolate(frontier, x, f, cf)
+        if check_type1_1(new.score, s):
+            print("+", end="")
+            s = new.score
+            frontier[i].copy(new)
+            cur.append(new.score)
+        else:
+            print(".", end="")
+            cur.append(s)
+        total += s
+        n += 1
+    return total,n
 
 def update(mod, f, cf, frontier):
     cur = []
     for i, x in enumerate(frontier):
-        s = x.score(frontier)
+        s = x.score()
         new = extrapolate(frontier, x.candidates, f, cf, i, mod)
         new_sc = new.score()
         if check_type1(new, x):
@@ -42,6 +67,23 @@ def extrapolate(frontier, one, f, cf, id, mode):
         ok = res.check()
     return res
 
+def extrapolate_1(frontier, one, f, cf, id, mode):
+    two, three, four = threeOthers(frontier, id)
+    ok = False
+    while not ok:
+        changed = False
+        for d in range(len(one)):
+            ran = random()
+            x, y, z = two.candidates[d], three.candidates[d], four.candidates[d]
+            if ran < cf:
+                changed = True
+                new = x + f * (y - z)
+                res.candidates[d] = trim(new, d, mode)  # keep in range
+        if not changed:
+            ran_index = randint(0, len(one) - 1)
+            res.candidates[ran_index] = two.candidates[ran_index]
+        ok = res.check()
+    return res
 
 def trim(val,index,mode):
     mod = mode()
@@ -69,17 +111,18 @@ def threeOthers(frontier, avoid):
        oneOther(seen, selected)
     return selected[0], selected[1], selected[2]
 
-
 def de(mode, max_tries=100, frontier_size=50, f=0.75, cf=0.3, epsilon=0.01):
     # vars
     ib = 0
-    frontier = [mode() for _ in range(frontier_size)]
+    problem_DTLZ = mode()
+    frontier = populate(problem_DTLZ, frontier_size)
+    #frontier = [mode() for _ in range(frontier_size)]
     prev = []
     lives = 5
 
     # eras
     for k in range(max_tries):
-        frontier, cur = update(mode, f, cf, frontier)
+        frontier, cur = update_1(mode, f, cf, frontier)
         print("Tries: %2d, : current solutions: %s, " % (k, cur), end="\n")
         if not prev:
             prev = cur[:]
@@ -105,9 +148,24 @@ def de(mode, max_tries=100, frontier_size=50, f=0.75, cf=0.3, epsilon=0.01):
     f1, f2 = frontier[ib].fi()
     print(f1, f2, frontier[ib].candidates, score)
     return frontier[ib]
+    
+def de_1(mode, max_tries=100, frontier_size=50, f=0.75, cf=0.3, epsilon=0.01):
+    # vars
+    ib = 0
+    problem_DTLZ = mode()
+    frontier = populate(problem_DTLZ, frontier_size)
+    #frontier = [mode() for _ in range(frontier_size)]
+    prev = []
+    lives = 5
+    
+    for k in range(max_tries):
+        total,n = update_1(mode,f,cf,frontier)
+        if total/n > (1 - epsilon):
+            break
+    return frontier
 
 
 if __name__ == "__main__":
-    de(mode=DTLZ1)
+    de_1(mode=DTLZ1)
     #d = DTLZ7()
     #print(d.decisionSpace)

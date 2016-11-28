@@ -115,6 +115,9 @@ class Point(O):
         new = Point(self.decisions[:])
         new.objectives = self.objectives[:]
         return new
+        
+    def score(self):
+        return math.fabs(sum(self.decisions))
 
 
 class Problem(O):

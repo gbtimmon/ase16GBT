@@ -1,6 +1,6 @@
 from __future__ import print_function, unicode_literals
 from __future__ import absolute_import, division
-from DTLZ7 import DTLZ7
+from DTLZ import DTLZ1
 from stats import a12
 
 
@@ -37,9 +37,9 @@ def check_type2(era, era_1):
 
 
 if __name__ == "__main__":
-    DTLZ7_1 = DTLZ7()
-    DTLZ7 = DTLZ7()
-    print('DTLZ7: %s' % DTLZ7.candidates)
-    print('DTLZ7_1: %s' % DTLZ7_1.candidates)
-    print(check_type1(DTLZ7_1, DTLZ7))
-    print(check_type2(DTLZ7_1.candidates, DTLZ7.candidates))
+    DTLZ1_1 = DTLZ1()
+    DTLZ1 = DTLZ1()
+    print('DTLZ1: %s' % DTLZ1.candidates)
+    print('DTLZ1_1: %s' % DTLZ1_1.candidates)
+    print(check_type1(DTLZ1_1, DTLZ1))
+    print(check_type2(DTLZ1_1.candidates, DTLZ1.candidates))

@@ -7,8 +7,6 @@ import sys
 import matplotlib.pyplot as plt
 from Model import *
 
-
-
 def ga(pop_size = 100, gens = 250):
     from DTLZ import DTLZ1
     problem = DTLZ1(4,20)
