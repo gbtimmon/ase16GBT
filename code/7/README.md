@@ -146,9 +146,26 @@ As shown in the table, Differential Evolution works best on DTLZ 7 with 2 object
 
 ## Threats to Validity
 
+*  the optimizer search for the solution stochastically. They do not guarantee an optimal solution can be found but they can reduce the time complexity and provide high probability to get a solution that is very close to the optimal one.
+
+* Running the code for a larger number of iterations may produce a more convincing result. 
+
+* As the three optimizers use different ways in searching, it is difficult to control the number of generations to make the comparison fair.
+
+* By this experiment, Differential Evolution seems to be the most efficient and effective optimizer. Howerver, it is a mistake to conclude that Differential Evolution can take the place of the other two optimizers in optimizing models. All the three algorithms have different suitable use case. For example, Simulated Annealing is useful when the memory space is limited. Each algorithm may also behave differently when searching for different landspace. 
+
+* The exploration rate of the searching space is not considered.
+
 ## Future Work
 
-## Conclusion
+* This practice only used one model with fixed number of decisions and objectives. This can be expanded to multiple model with various number of decisions and objectives, which will provide more considerable results. 
+
+* The evaluation can also be expanded from merely score of objectives to time taken in each generation and rate of space explored in the model. 
+
+* Genetic Algorithm can also be included in this practice. 
+
+* A research can be established to find specific constraints to provide better fairness when running three different optimizers. 
+
 
 ## Reference
 [1] https://github.com/txt/ase16/blob/master/src/stats.py
