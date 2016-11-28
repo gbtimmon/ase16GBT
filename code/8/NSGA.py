@@ -7,31 +7,8 @@ from Model import *
 from DTLZ import *
 
 
-# def crossover(mom, dad):
-#     decisions = []
-#     for i in xrange(len(mom.decisions)):
-#         if random.random() > 0.5:
-#             decisions.append(mom.decisions[i])
-#         else:
-#             decisions.append(dad.decisions[i])
-#     return Point(decisions)
-
-
 def reproduce(problem, population, pop_size):
     children = []
-    # for i, p1 in enumerate(population):
-    #     if (i % 2 == 0):
-    #         p2 = population[i+1]
-    #     else:
-    #         p2 = population[i-1]
-    #     if i == len(population) - 1:
-    #         p2 = population[0]
-    #     child = mutate(problem, crossover(p1, p2))
-    #     children.append(child)
-    #     if(len(children) >= pop_size):
-    #         break
-    # return children
-
     for _ in xrange(pop_size):
         mom = random.choice(population)
         dad = random.choice(population)
