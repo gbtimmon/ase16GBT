@@ -7,8 +7,31 @@ from Model import *
 from DTLZ import *
 
 
+# def crossover(mom, dad):
+#     decisions = []
+#     for i in xrange(len(mom.decisions)):
+#         if random.random() > 0.5:
+#             decisions.append(mom.decisions[i])
+#         else:
+#             decisions.append(dad.decisions[i])
+#     return Point(decisions)
+
+
 def reproduce(problem, population, pop_size):
     children = []
+    # for i, p1 in enumerate(population):
+    #     if (i % 2 == 0):
+    #         p2 = population[i+1]
+    #     else:
+    #         p2 = population[i-1]
+    #     if i == len(population) - 1:
+    #         p2 = population[0]
+    #     child = mutate(problem, crossover(p1, p2))
+    #     children.append(child)
+    #     if(len(children) >= pop_size):
+    #         break
+    # return children
+
     for _ in xrange(pop_size):
         mom = random.choice(population)
         dad = random.choice(population)
@@ -55,7 +78,7 @@ def calculate_crowding_distance(problem, population):
     for point in population:
         point.dist = 0.0
     for i in xrange(len(problem.objectives)):
-        min_point =  min(population, key=lambda point: point.objectives[i])
+        min_point = min(population, key=lambda point: point.objectives[i])
         max_point = max(population, key=lambda point: point.objectives[i])
         rge = max_point.objectives[i] - min_point.objectives[i]
         population[0].dist = float("inf")
@@ -75,6 +98,7 @@ def crowded_comparison_operator(x, y):
         return compare(x.dist, y.dist)
     return compare(x.rank, y.rank)
 
+
 def select_parents(problem, fronts, pop_size):
     [calculate_crowding_distance(problem, front) for front in fronts]
     offspring = []
@@ -84,7 +108,8 @@ def select_parents(problem, fronts, pop_size):
             break
         for point in front:
             offspring.append(point)
-        last_front += 1
+        if(fronts.index(front) < len(fronts) - 1):
+            last_front += 1
     remaining = pop_size - len(offspring)
     if(remaining > 0):
         fronts[last_front].sort(cmp=crowded_comparison_operator)
@@ -98,38 +123,22 @@ def nsgaii(pop_size=100, gens=250, dom_func=bdom, problem=DTLZ1):
     initial_population = [point.clone() for point in population]
     fast_non_dominated_sort(problem, population, dom_func)
     children = reproduce(problem, population, pop_size)
-    #[problem.evaluate(child) for child in children]
+    # [problem.evaluate(child) for child in children]
     gen = 0
     while gen < gens:
         say(".")
         union = population + children
         fronts = fast_non_dominated_sort(problem, union, dom_func)
         parents = select_parents(problem, fronts, pop_size)
-        pop = children
+        population = children
         children = reproduce(problem, parents, pop_size)
-        #[problem.evaluate(child) for child in children]
+        # [problem.evaluate(child) for child in children]
         gen += 1
-    union = pop + children
+    union = population + children
     fronts = fast_non_dominated_sort(problem, union, dom_func)
     parents = select_parents(problem, fronts, pop_size)
     print("")
     return initial_population, parents
-
-
-def plot_pareto(initial, final):
-    initial_objs = [point.objectives for point in initial]
-    final_objs = [point.objectives for point in final]
-    initial_x = [i[1] for i in initial_objs]
-    initial_y = [i[2] for i in initial_objs]
-    final_x = [i[1] for i in final_objs]
-    final_y = [i[2] for i in final_objs]
-    plt.scatter(initial_x, initial_y, color='b', marker='+', label='initial')
-    plt.scatter(final_x, final_y, color='r', marker='o', label='final')
-    plt.title("Scatter Plot between initial and final population of GA")
-    plt.ylabel("Score")
-    plt.xlabel("Completion")
-    plt.legend(loc=9, bbox_to_anchor=(0.5, -0.175), ncol=2)
-    plt.show()
 
 
 def write_results(filename, problem, final):
@@ -146,23 +155,23 @@ try:
 except Exception:
     pass
 
-initial, final = ga(gens=50, problem=DTLZ1())
-write_results('results/GA_DTLZ1.out', DTLZ1(), final)
+# initial, final = ga(gens=50, problem=DTLZ1())
+# write_results('results/GA_DTLZ1.out', DTLZ1(), final)
 
-initial, final = nsgaii(gens=50, problem=DTLZ1())
-write_results('results/NSGA_DTLZ1.out', DTLZ1(), final)
+# initial, final = nsgaii(problem=DTLZ1())
+# write_results('results/NSGA_DTLZ1.out', DTLZ1(), final)
 
 # initial, final = ga(gens=50, problem=POM3())
 # write_results('results/GA_POM3.out', POM3(), final)
 
-initial, final = ga(gens=50, problem=DTLZ3())
-write_results('results/GA_DTLZ3.out', DTLZ3(), final)
+# initial, final = ga(gens=50, problem=DTLZ3())
+# write_results('results/GA_DTLZ3.out', DTLZ3(), final)
 
-initial, final = ga(gens=50, problem=DTLZ5())
-write_results('results/GA_DTLZ5.out', DTLZ5(), final)
+initial, final = nsgaii(gens=50, problem=DTLZ5())
+write_results('results/NSGA_DTLZ5.out', DTLZ5(), final)
 
-initial, final = ga(gens=50, problem=DTLZ7())
-write_results('results/GA_DTLZ7.out', DTLZ7(), final)
+# initial, final = nsgaii(gens=50, problem=DTLZ7())
+# write_results('results/GA_DTLZ7.out', DTLZ7(), final)
 
 plot_pareto(initial, final)
 

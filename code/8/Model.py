@@ -292,3 +292,19 @@ def ga(pop_size=100, gens=250, dom_func=bdom, problem=POM3):
         gen += 1
     print("")
     return initial_population, population
+
+
+def plot_pareto(initial, final):
+    initial_objs = [point.objectives for point in initial]
+    final_objs = [point.objectives for point in final]
+    initial_x = [i[1] for i in initial_objs]
+    initial_y = [i[2] for i in initial_objs]
+    final_x = [i[1] for i in final_objs]
+    final_y = [i[2] for i in final_objs]
+    plt.scatter(initial_x, initial_y, color='b', marker='+', label='initial')
+    plt.scatter(final_x, final_y, color='r', marker='o', label='final')
+    plt.title("Scatter Plot between initial and final population of GA")
+    plt.ylabel("Score")
+    plt.xlabel("Completion")
+    plt.legend(loc=9, bbox_to_anchor=(0.5, -0.175), ncol=2)
+    plt.show()
