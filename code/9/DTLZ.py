@@ -90,6 +90,18 @@ class DTLZ3(Problem):
         if not point.objectives:
             point.objectives = self.simulate(point.decisions)
         return point.objectives
+        
+    def score(self, objectives):
+        total = 0
+        for x in range(self.num_objectives):
+            total += objectives[x]
+        return total
+
+    def check(self):
+        for i in range(0, len(self.decisions)):
+            if self.decisions[i] < 0 or self.decisions[i] > 1:
+                return False
+        return True
 
 
 class DTLZ5(Problem):
@@ -126,6 +138,18 @@ class DTLZ5(Problem):
         if not point.objectives:
             point.objectives = self.simulate(point.decisions)
         return point.objectives
+        
+    def score(self, objectives):
+        total = 0
+        for x in range(self.num_objectives):
+            total += objectives[x]
+        return total
+
+    def check(self):
+        for i in range(0, len(self.decisions)):
+            if self.decisions[i] < 0 or self.decisions[i] > 1:
+                return False
+        return True
 
 
 class DTLZ7(Problem):
@@ -159,3 +183,15 @@ class DTLZ7(Problem):
         if not point.objectives:
             point.objectives = self.simulate(point.decisions)
         return point.objectives
+        
+    def score(self, objectives):
+        total = 0
+        for x in range(self.num_objectives):
+            total += objectives[x]
+        return total
+
+    def check(self):
+        for i in range(0, len(self.decisions)):
+            if self.decisions[i] < 0 or self.decisions[i] > 1:
+                return False
+        return True
