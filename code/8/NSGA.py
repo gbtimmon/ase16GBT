@@ -132,7 +132,7 @@ except Exception:
 # initial, final = ga(gens=50, problem=DTLZ1())
 # write_results('results/GA_DTLZ1.out', DTLZ1(), final)
 
-initial, final = nsgaii(problem=DTLZ1())
+initial, final = nsgaii(problem=DTLZ1(), crossover_rate=1.0, mutation=(1 / 20.0))
 write_results('results/NSGA_DTLZ1.out', DTLZ1(), final)
 
 # initial, final = ga(gens=50, problem=POM3())
