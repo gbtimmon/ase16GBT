@@ -1,5 +1,6 @@
 from __future__ import print_function, unicode_literals
 from __future__ import division
+from random import random, randint
 from math import pi, fabs, sin
 from DTLZ import DTLZ1
 
@@ -10,15 +11,14 @@ def populate(problem, size):
     	population.append(problem.generate_one())
     return population
     
-def check_type1_1(X, Y):
-    return X.score() < Y.score()
-    
 def update_1(mod, f, cf, frontier):
     cur = []
-    for x in enumerate(frontier):
+    total = 0
+    n = 0
+    for x in frontier:
         s = x.score()
-        new = extrapolate(frontier, x, f, cf)
-        if check_type1_1(new.score, s):
+        new = extrapolate_1(frontier, x, f, cf, mod)
+        if (new.score < s):
             print("+", end="")
             s = new.score
             frontier[i].copy(new)
@@ -30,68 +30,30 @@ def update_1(mod, f, cf, frontier):
         n += 1
     return total,n
 
-def update(mod, f, cf, frontier):
-    cur = []
-    for i, x in enumerate(frontier):
-        s = x.score()
-        new = extrapolate(frontier, x.candidates, f, cf, i, mod)
-        new_sc = new.score()
-        if check_type1(new, x):
-            print("+", end="")
-            s = new_sc
-            frontier[i].copy(new)
-            cur.append(new_sc)
-        else:
-            print(".", end="")
-            cur.append(s)
-    return frontier, cur
 
-
-def extrapolate(frontier, one, f, cf, id, mode):
-    res = mode()
-    res.candidates = one[:]
-    two, three, four = threeOthers(frontier, id)
+def extrapolate_1(frontier, one, f, cf, mod):
+    res = mod()
+    res.decisions = one.decisions
+    two, three, four = threeOthers(frontier, one.id)
     ok = False
     while not ok:
         changed = False
-        for d in range(len(one)):
+        for d in range(0,len(one.decisions)-1):
             ran = random()
-            x, y, z = two.candidates[d], three.candidates[d], four.candidates[d]
+            x, y, z = two.decisions[d], three.decisions[d], four.decisions[d]
             if ran < cf:
                 changed = True
                 new = x + f * (y - z)
-                res.candidates[d] = trim(new, d, mode)  # keep in range
+                ans = trim_1(new, d, mod)
+                #res.decisions = trim_1(new, d, mod)  # keep in range
         if not changed:
             ran_index = randint(0, len(one) - 1)
             res.candidates[ran_index] = two.candidates[ran_index]
         ok = res.check()
     return res
-
-def extrapolate_1(frontier, one, f, cf, id, mode):
-    two, three, four = threeOthers(frontier, id)
-    ok = False
-    while not ok:
-        changed = False
-        for d in range(len(one)):
-            ran = random()
-            x, y, z = two.candidates[d], three.candidates[d], four.candidates[d]
-            if ran < cf:
-                changed = True
-                new = x + f * (y - z)
-                res.candidates[d] = trim(new, d, mode)  # keep in range
-        if not changed:
-            ran_index = randint(0, len(one) - 1)
-            res.candidates[ran_index] = two.candidates[ran_index]
-        ok = res.check()
-    return res
-
-def trim(val,index,mode):
-    mod = mode()
-    if val > mod.decisions[index].hi:
-      val = val % (mod.decisions[index].hi - mod.decisions[index].lo)
-    while val < mod.decisions[index].lo:
-      val = mod.decisions[index].hi - mod.decisions[index].lo + val
-    return val
+    
+def trim_1(val,index,mode):
+    return max(0, min(index,1))
 
 
 def threeOthers(frontier, avoid):
@@ -110,44 +72,6 @@ def threeOthers(frontier, avoid):
     while len(selected) < 3:
        oneOther(seen, selected)
     return selected[0], selected[1], selected[2]
-
-def de(mode, max_tries=100, frontier_size=50, f=0.75, cf=0.3, epsilon=0.01):
-    # vars
-    ib = 0
-    problem_DTLZ = mode()
-    frontier = populate(problem_DTLZ, frontier_size)
-    #frontier = [mode() for _ in range(frontier_size)]
-    prev = []
-    lives = 5
-
-    # eras
-    for k in range(max_tries):
-        frontier, cur = update_1(mode, f, cf, frontier)
-        print("Tries: %2d, : current solutions: %s, " % (k, cur), end="\n")
-        if not prev:
-            prev = cur[:]
-        else:
-            lives += check_type2(prev, cur)
-            prev = cur[:]
-        if lives is 0:
-            print("\n no changing detected, early terminating program")
-            break
-
-    # find best candidate
-    ib = 0
-    score = None
-    for i, x in enumerate(frontier):
-        if score is None:
-            score = x.score()
-        else:
-            curScore = x.score()
-            if score > curScore:
-                score = curScore
-                ib = i
-
-    f1, f2 = frontier[ib].fi()
-    print(f1, f2, frontier[ib].candidates, score)
-    return frontier[ib]
     
 def de_1(mode, max_tries=100, frontier_size=50, f=0.75, cf=0.3, epsilon=0.01):
     # vars
@@ -166,6 +90,7 @@ def de_1(mode, max_tries=100, frontier_size=50, f=0.75, cf=0.3, epsilon=0.01):
 
 
 if __name__ == "__main__":
-    de_1(mode=DTLZ1)
+    d = de_1(mode=DTLZ1)
+    print(d)
     #d = DTLZ7()
     #print(d.decisionSpace)

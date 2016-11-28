@@ -6,11 +6,14 @@ import random
 import sys
 import matplotlib.pyplot as plt
 from Model import *
+from de1 import de_1
 
 def ga(pop_size = 100, gens = 250):
     from DTLZ import DTLZ1
     problem = DTLZ1(4,20)
-    population = populate(problem, pop_size)
+    
+    #population = populate(problem, pop_size)
+    population = de_1(mode=DTLZ1)
     [problem.evaluate(point) for point in population]
     initial_population = [point.clone() for point in population]
     gen = 0 

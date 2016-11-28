@@ -97,6 +97,7 @@ class Objective(O):
 
 
 class Point(O):
+    id = 0
     """
     Represents a member of the population
     """
@@ -104,6 +105,7 @@ class Point(O):
         O.__init__(self)
         self.decisions = decisions
         self.objectives = None
+        self.id = Point.id = Point.id + 1
 
     def __hash__(self):
         return hash(tuple(self.decisions))
@@ -118,6 +120,12 @@ class Point(O):
         
     def score(self):
         return math.fabs(sum(self.decisions))
+        
+    def low():
+        return max(self.decisions)
+        
+    def high():
+        return min(self.decisions)
 
 
 class Problem(O):

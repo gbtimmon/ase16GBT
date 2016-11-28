@@ -52,6 +52,12 @@ class DTLZ1(Problem):
             total += objectives[x]
         return total
 
+    def check(self):
+        for i in range(0, len(self.decisions)):
+            if self.decisions[i] < 0 or self.decisions[i] > 1:
+                return False
+        return True
+
 class DTLZ3(Problem):
     def __init__(self, num_objectives=4, num_decisions=20):
         self.num_objectives = num_objectives
