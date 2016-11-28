@@ -7,6 +7,13 @@ from Model import *
 from DTLZ import *
 
 
+def refresh_objectives(problem, population):
+    for i, obj in enumerate(problem.objectives):
+        scores = [point.objectives[i] for point in population]
+        obj.low = min(obj.low, min(scores))
+        obj.high = max(obj.high, max(scores))
+
+
 def reproduce(problem, population, pop_size, mutation, crossover_rate):
     children = []
     for _ in xrange(pop_size):
@@ -96,9 +103,14 @@ def select_parents(problem, fronts, pop_size):
 def nsgaii(pop_size=100, gens=250, mutation=0.01, crossover_rate=0.9, dom_func=bdom, problem=DTLZ1):
     population = populate(problem, pop_size)
     [problem.evaluate(point) for point in population]
+    if dom_func == cdom:
+        refresh_objectives(problem, population)
     initial_population = [point.clone() for point in population]
     fast_non_dominated_sort(problem, population, dom_func)
     children = reproduce(problem, population, pop_size, mutation, crossover_rate)
+    if dom_func == cdom:
+        [problem.evaluate(child) for child in children]
+        refresh_objectives(problem, children)
     gen = 0
     while gen < gens:
         say(".")
@@ -107,6 +119,9 @@ def nsgaii(pop_size=100, gens=250, mutation=0.01, crossover_rate=0.9, dom_func=b
         parents = select_parents(problem, fronts, pop_size)
         population = children
         children = reproduce(problem, parents, pop_size, mutation, crossover_rate)
+        if dom_func == cdom:
+            [problem.evaluate(child) for child in children]
+            refresh_objectives(problem, children)
         gen += 1
     union = population + children
     fronts = fast_non_dominated_sort(problem, union, dom_func)
@@ -132,8 +147,8 @@ except Exception:
 # initial, final = ga(gens=50, problem=DTLZ1())
 # write_results('results/GA_DTLZ1.out', DTLZ1(), final)
 
-initial, final = nsgaii(problem=DTLZ1(), crossover_rate=1.0, mutation=(1 / 20.0))
-write_results('results/NSGA_DTLZ1.out', DTLZ1(), final)
+# initial, final = nsgaii(problem=DTLZ1(), crossover_rate=1.0, mutation=(1 / 20.0), dom_func=cdom)
+# write_results('results/NSGA_DTLZ1.out', DTLZ1(), final)
 
 # initial, final = ga(gens=50, problem=POM3())
 # write_results('results/GA_POM3.out', POM3(), final)
@@ -141,8 +156,8 @@ write_results('results/NSGA_DTLZ1.out', DTLZ1(), final)
 # initial, final = ga(gens=50, problem=DTLZ3())
 # write_results('results/GA_DTLZ3.out', DTLZ3(), final)
 
-# initial, final = nsgaii(gens=50, problem=DTLZ5())
-# write_results('results/NSGA_DTLZ5.out', DTLZ5(), final)
+initial, final = nsgaii(gens=50, problem=DTLZ5(), dom_func=cdom)
+write_results('results/NSGA_DTLZ5.out', DTLZ5(), final)
 
 # initial, final = nsgaii(gens=50, problem=DTLZ7())
 # write_results('results/GA_DTLZ7.out', DTLZ7(), final)

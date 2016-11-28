@@ -6,6 +6,8 @@ def create_objectives(num_objectives):
     objs = []
     for i in xrange(num_objectives):
         objs.append(Objective(str(i)))
+        objs[-1].high = sys.float_info.min
+        objs[-1].low = sys.float_info.max
     return objs
 
 

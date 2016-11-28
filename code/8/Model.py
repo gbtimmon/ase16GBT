@@ -226,28 +226,25 @@ def bdom(problem, one, two):
     return dominates
 
 
-def loss1(problem, i,x,y):
-    obj = problem.objectives[i]
-    better = lt if obj.do_minimize else gt
-    return (x - y) if obj.do_minimize else (y - x)
-
-
-def expLoss(problem, i,x,y,n):
-    return math.exp( loss1(problem, i,x,y) / n)
+def exp_loss(problem, i, x, y, n):
+    w = -1 if problem.objectives[i].do_minimize else 1
+    return -1 * math.e**(w * (x - y) / n)
 
 
 def loss(problem, one, two):
-    objs_one,objs_two = problem.evaluate(one), problem.evaluate(two)
-    n      = len(problem.objectives)
-    losses = [ expLoss(problem, i,onei,twoi,n)
-                 for i, (onei, twoi)
-                   in enumerate(zip(objs_one, objs_two)) ]
-    return sum(losses) / n
+    losses = 0
+    n = min(len(one.objectives), len(two.objectives))
+    for i, (x1, y1) in enumerate(zip(one.objectives, two.objectives)):
+        x1 = problem.objectives[i].normalize(x1)
+        y1 = problem.objectives[i].normalize(y1)
+        losses += exp_loss(problem, i, x1, y1, n)
+    return losses / n  # return mean loss
 
 
-def cdom(problem, one, two):
-   "one dominates two if it losses least"
-   return loss(problem, one, two) < loss(problem, two, one)
+def cdom(problem, x, y):
+    l1 = loss(problem, x, y)
+    l2 = loss(problem, y, x)
+    return l1 < l2   # l1 is better if it losses least
 
 
 def fitness(problem, population, point, dom_func):
