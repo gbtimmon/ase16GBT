@@ -7,14 +7,14 @@ from Model import *
 from DTLZ import *
 
 
-def reproduce(problem, population, pop_size):
+def reproduce(problem, population, pop_size, mutation, crossover_rate):
     children = []
     for _ in xrange(pop_size):
         mom = random.choice(population)
         dad = random.choice(population)
         while (mom == dad):
             dad = random.choice(population)
-        child = mutate(problem, crossover(mom, dad))
+        child = mutate(problem, crossover(mom, dad, crossover_rate), mutation)
         if problem.is_valid(child) and child not in population + children:
             children.append(child)
     return children
@@ -55,9 +55,8 @@ def calculate_crowding_distance(problem, population):
     for point in population:
         point.dist = 0.0
     for i in xrange(len(problem.objectives)):
-        min_point = min(population, key=lambda point: point.objectives[i])
-        max_point = max(population, key=lambda point: point.objectives[i])
-        rge = max_point.objectives[i] - min_point.objectives[i]
+        population.sort(key=lambda point: point.objectives[i])
+        rge = population[-1].objectives[i] - population[0].objectives[i]
         population[0].dist = float("inf")
         population[-1].dist = float("inf")
         if(rge == 0):
@@ -72,7 +71,7 @@ def compare(a, b):
 
 def crowded_comparison_operator(x, y):
     if(x.rank == y.rank):
-        return compare(x.dist, y.dist)
+        return compare(y.dist, x.dist)
     return compare(x.rank, y.rank)
 
 
@@ -94,13 +93,12 @@ def select_parents(problem, fronts, pop_size):
     return offspring
 
 
-def nsgaii(pop_size=100, gens=250, dom_func=bdom, problem=DTLZ1):
+def nsgaii(pop_size=100, gens=250, mutation=0.01, crossover_rate=0.9, dom_func=bdom, problem=DTLZ1):
     population = populate(problem, pop_size)
     [problem.evaluate(point) for point in population]
     initial_population = [point.clone() for point in population]
     fast_non_dominated_sort(problem, population, dom_func)
-    children = reproduce(problem, population, pop_size)
-    # [problem.evaluate(child) for child in children]
+    children = reproduce(problem, population, pop_size, mutation, crossover_rate)
     gen = 0
     while gen < gens:
         say(".")
@@ -108,8 +106,7 @@ def nsgaii(pop_size=100, gens=250, dom_func=bdom, problem=DTLZ1):
         fronts = fast_non_dominated_sort(problem, union, dom_func)
         parents = select_parents(problem, fronts, pop_size)
         population = children
-        children = reproduce(problem, parents, pop_size)
-        # [problem.evaluate(child) for child in children]
+        children = reproduce(problem, parents, pop_size, mutation, crossover_rate)
         gen += 1
     union = population + children
     fronts = fast_non_dominated_sort(problem, union, dom_func)
@@ -135,8 +132,8 @@ except Exception:
 # initial, final = ga(gens=50, problem=DTLZ1())
 # write_results('results/GA_DTLZ1.out', DTLZ1(), final)
 
-# initial, final = nsgaii(problem=DTLZ1())
-# write_results('results/NSGA_DTLZ1.out', DTLZ1(), final)
+initial, final = nsgaii(problem=DTLZ1())
+write_results('results/NSGA_DTLZ1.out', DTLZ1(), final)
 
 # initial, final = ga(gens=50, problem=POM3())
 # write_results('results/GA_POM3.out', POM3(), final)
@@ -144,8 +141,8 @@ except Exception:
 # initial, final = ga(gens=50, problem=DTLZ3())
 # write_results('results/GA_DTLZ3.out', DTLZ3(), final)
 
-initial, final = nsgaii(gens=50, problem=DTLZ5())
-write_results('results/NSGA_DTLZ5.out', DTLZ5(), final)
+# initial, final = nsgaii(gens=50, problem=DTLZ5())
+# write_results('results/NSGA_DTLZ5.out', DTLZ5(), final)
 
 # initial, final = nsgaii(gens=50, problem=DTLZ7())
 # write_results('results/GA_DTLZ7.out', DTLZ7(), final)

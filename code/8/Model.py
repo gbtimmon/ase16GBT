@@ -186,11 +186,13 @@ def populate(problem, size):
     return population
 
 
-def crossover(mom, dad):
+def crossover(mom, dad, crossover_rate=0.9):
     """
     Create a new point which contains decisions from
     the first half of mom and second half of dad
     """
+    if random.random() > crossover_rate:
+        return mom
     n = len(mom.decisions)
     return Point(mom.decisions[:n // 2] + dad.decisions[n // 2:])
 
