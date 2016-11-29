@@ -86,7 +86,7 @@ def de(mode, max_tries=3, frontier_size=5, f=0.75, cf=0.3, epsilon=0.01):
 
 
 if __name__ == "__main__":
-    d = de_1(mode=DTLZ1)
+    d = de(mode=DTLZ1)
     print(d)
     #d = DTLZ7()
     #print(d.decisionSpace)

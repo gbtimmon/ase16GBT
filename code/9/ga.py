@@ -6,7 +6,7 @@ import random
 import sys
 import matplotlib.pyplot as plt
 from Model import *
-from de1 import de_1
+from de1 import de
 from hypervolume_runner import *
 from DTLZ import *
 from hypervolume_helper import *
