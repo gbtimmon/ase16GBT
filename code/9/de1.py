@@ -10,8 +10,8 @@ def populate(problem, size):
     # TODO 6: Create a list of points of length 'size'
     for _ in xrange(size):
     	point = problem.generate_one()
-		problem.evaluate(point)
-    	population.append(point)
+        problem.evaluate(point)
+        population.append(point)
     return population
     
 def update_1(mod, f, cf, frontier):
@@ -76,7 +76,7 @@ def threeOthers(frontier, avoid):
        oneOther(seen, selected)
     return selected[0], selected[1], selected[2]
     
-def de_1(mode, max_tries=100, frontier_size=50, f=0.75, cf=0.3, epsilon=0.01):
+def de_1(mode, max_tries=100, frontier_size=3, f=0.75, cf=0.3, epsilon=0.01):
     prob = GAProblem(mode, 4, 20)
     frontier = populate(prob, frontier_size)
 
