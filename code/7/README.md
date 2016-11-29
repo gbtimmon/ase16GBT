@@ -124,11 +124,11 @@ The Scott & Knott method make use of a cluster analysis algorithm, where, starti
 ## Results
 
 ### Counts of Earlty termination
-| Optimizer | Number of  early terminations  |
-|-----------|--------------------------------|
-| SA        | 9                              |
-| MWS       | 16                             |
-| DE        | 20                             |
+| Optimizer | Number of  eras before termination  |
+|-----------|-------------------------------------|
+| SA        | 18                                  |
+| MWS       | 11                                  |
+| DE        | 16                                  |
 
 As shown in the table, Simulated Annealing has the lowest number of early termination, which suggests that the algorithm takes the most generation to search and find the best result. On the other hand, Differential Evolution has every try early terminated. As the only algorithm keeping a population frontier, it is highly efficient in searching the landscape.
 
@@ -136,9 +136,23 @@ As shown in the table, Simulated Annealing has the lowest number of early termin
 ```
 rank ,         name ,    med   ,  iqr 
 ----------------------------------------------------
-   1 ,           sa ,    3.85  ,  4.54 (   ---*----    |              ), 2.23,  4.11,  6.77
-   1 ,          mws ,    4.37  ,  3.91 (    ---*---    |              ), 3.04,  4.50,  6.95
-   2 ,           de ,    8.14  ,  7.89 (        ------*|-------       ), 5.11,  8.32,  12.99
+   1 ,           de ,    0.13  ,  0.53 (-*---          |              ), 0.06,  0.15,  0.60
+   1 ,          mws ,    0.25  ,  0.49 (--*--          |              ), 0.09,  0.29,  0.59
+   1 ,           sa ,    0.74  ,  0.76 (  ----*--      |              ), 0.26,  0.78,  1.03
+
+rank ,         name ,    med   ,  iqr 
+----------------------------------------------------
+   1 ,          mws ,    0.39  ,  0.81 ( --*----       |              ), 0.21,  0.39,  1.02
+   1 ,           de ,    0.56  ,  0.94 ( ---*---       |              ), 0.17,  0.57,  1.11
+   1 ,           sa ,    0.78  ,  1.65 (------*------  |              ), 0.06,  0.83,  1.71
+
+rank ,         name ,    med   ,  iqr 
+----------------------------------------------------
+   1 ,          mws ,    0.27  ,  1.32 (-*-------      |              ), 0.09,  0.28,  1.41
+   1 ,           sa ,    0.38  ,  2.37 (--*------------|              ), 0.09,  0.43,  2.45
+   1 ,           de ,    0.70  ,  1.01 (  --*----      |              ), 0.36,  0.74,  1.37
+
+
    
 ```
 
