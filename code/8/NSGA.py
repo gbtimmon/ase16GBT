@@ -182,21 +182,31 @@ except Exception:
 # write_results('results/GA_DTLZ3.out', DTLZ3(), final)
 
 results_file = open('results/results.txt', 'w')
+obj_list = [2, 4, 6]
+decisions_list = [10, 20, 40]
+dom_func_list = [bdom, cdom]
+prob_func_list = [DTLZ1, DTLZ3, DTLZ5, DTLZ7]
 
-print('NSGA_DTLZ5_BDOM')
-for i in xrange(10):
-    say("Run " + str(i + 1).zfill(2) + ": ")
-    problem = DTLZ5()
-    initial, final = nsgaii(gens=50, problem=problem, dom_func=bdom)
-    # writing results of the frontier for hypervol to calculate
-    write_results('NSGA_DTLZ5_{0}.txt'.format(i), problem, final)
-results_file.write('NSGA_DTLZ5_BDOM\n')
-h_list = get_hypervolume_list()
-for item in h_list:
-    results_file.write(str(item) + " ")
-results_file.flush()
-say("Hypervolumes: ")
-print(h_list)
+for prob in prob_func_list:
+    for func in dom_func_list:
+        for obj_num in obj_list:
+            for dec_num in decisions_list:
+                print('NSGA_{3}_{2}({0}, {1})'.format(obj_num, dec_num, func.__name__, prob.__name__))
+                for i in xrange(20):
+                    say("Run " + str(i + 1).zfill(2) + ": ")
+                    problem = prob(obj_num, dec_num)
+                    initial, final = nsgaii(gens=50, problem=problem, dom_func=func)
+                    # writing results of the frontier for hypervol to calculate
+                    write_results('NSGA_{1}_{0}.txt'.format(i, prob.__name__), problem, final)
+                results_file.write('NSGA_{3}_{2}_{0}_{1}\n'.format(obj_num, dec_num, func.__name__, prob.__name__))
+                h_list = get_hypervolume_list()
+                for item in h_list:
+                    results_file.write(str(item) + " ")
+                    results_file.write("\n")
+                results_file.flush()
+                say("Hypervolumes: ")
+                print(h_list)
+                print()
 
 results_file.close()
 
