@@ -76,15 +76,15 @@ def threeOthers(frontier, avoid):
        oneOther(seen, selected)
     return selected[0], selected[1], selected[2]
     
-def de_1(mode, max_tries=100, frontier_size=3, f=0.75, cf=0.3, epsilon=0.01):
+def de_1(mode, max_tries=3, frontier_size=5, f=0.75, cf=0.3, epsilon=0.01):
     prob = GAProblem(mode, 4, 20)
     frontier = populate(prob, frontier_size)
-
     
     for k in range(max_tries):
         total,n = update_1(mode,f,cf,frontier)
         if total/n > (1 - epsilon):
             break
+	
     return frontier
 
 

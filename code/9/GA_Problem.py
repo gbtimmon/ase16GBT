@@ -31,7 +31,11 @@ class GAProblem(Problem):
             point.objectives = self.simulate(point.decisions)
         return point.objectives
 
+    def score(self):
+	    return point.objectives
+
 if __name__ == "__main__":
     prob = GAProblem(DTLZ1, 4, 20)
     point = prob.generate_one()
     print(prob.evaluate(point))
+    print(point)
