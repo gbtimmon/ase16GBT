@@ -15,7 +15,6 @@ def populate(problem, size):
     return population
     
 def update(problem, f, cf, frontier):
-    cur = []
     total = 0
     n = 0
     for point in frontier:
@@ -23,12 +22,10 @@ def update(problem, f, cf, frontier):
         new = extrapolate(frontier, point, f, cf, problem)
         if problem.score(new) < problem.score(point):
             print("+", end="")
-            s = new.score
-            frontier[i].copy(new)
-            cur.append(new.score)
+            s = problem.score(new)
+            frontier.copy(new)
         else:
             print(".", end="")
-            cur.append(s)
         total += s
         n += 1
     return total, n
@@ -81,7 +78,7 @@ def de(mode, max_tries=3, frontier_size=5, f=0.75, cf=0.3, epsilon=0.01):
     frontier = populate(prob, frontier_size)
     
     for k in range(max_tries):
-        total, n = update(mode,f,cf,frontier)
+        total, n = update(prob,f,cf,frontier)
         if total/n > (1 - epsilon):
             break
 	
