@@ -1,6 +1,6 @@
 from __future__ import print_function, unicode_literals
 from __future__ import absolute_import, division
-from random import random
+from random import random, seed
 from sys import stdout, maxint
 from math import exp, fabs
 from DTLZ7 import DTLZ7
@@ -17,31 +17,19 @@ def sa(model, baseline):
         return p
 
     # base line study
-    def findMinMax():
-        s = model()
-        Localmax = -maxint - 1
-        min = maxint
-        for i in xrange(1000):
-            sn = model()
-            curEval = sn.score()
-            if curEval > Localmax:
-                Localmax = curEval
-            elif curEval < min:
-                min = curEval
-        return (min, Localmax)
+
 
     # normalize energy
     def energy(eval, min, max):
         return (eval - min) / (max - min)
 
     # vars
-    min, localMax = findMinMax()
     # print(min, max)
     s = model()
     s.candidates = baseline.candidates[:]
     sb = model()
     sb.copy(s)
-    e = energy(s.score(), min, localMax)
+    e = s.score()
     eb = e
     kmax = 1000
     linewidth = 50
@@ -51,10 +39,11 @@ def sa(model, baseline):
     lives = 5
 
     # iteration through eras
+    seed(1)
     for k in xrange(1, kmax):
-        T = (k * 6 / kmax)
+        T = (k / kmax)
         sn = model()
-        en = energy(sn.score(), min, localMax)
+        en = sn.score()
         #use type 1 to compare s sn and sb
         p = probability(en, e, T)
         q = random()
@@ -90,7 +79,7 @@ def sa(model, baseline):
             cur = []
             stdout.write('\n %4d : %f ,' % (k, eb))
     print("")
-    print("Best solution: %s, " % sb.candidates, "\nf1 and f2: %s, " % sb.score())
+    print("Best solution: %s, " % sb.candidates, "\nf1 and f2: %s, " % sb.fi(), sb.score())
     return sb
 
 

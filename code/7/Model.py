@@ -1,6 +1,7 @@
 from __future__ import print_function, unicode_literals
 from __future__ import absolute_import, division
 from random import uniform
+from sys import maxint
 import sys
 
 class Decisions:
@@ -8,9 +9,15 @@ class Decisions:
         self.hi = hi
         self.lo = lo
 
+class Objectives:
+    def __init__(self,lo = maxint,hi = -maxint - 1):
+        self.hi = hi
+        self.lo = lo
+
 class Model(object):
     def any(self):
         while True:
+            self.candidates = []
             for dec in self.decisions:
                 self.candidates.append(uniform(dec.lo, dec.hi))
             if self.check():
