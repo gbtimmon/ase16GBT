@@ -1,6 +1,12 @@
 from hypervolume import InnerHyperVolume
 import os
 
+
+def listdir_nohidden(path):
+    for f in os.listdir(path):
+        if not f.startswith('.'):
+            yield f
+
 class HyperVolumeContainer():
     def __init__(self, filename, results):
         self.name = filename
@@ -61,6 +67,6 @@ def HyperVolume_wrapper():
         pass
     folder_path = "./Pareto_Fronts/"
     from os import listdir
-    filenames = [folder_path + file for file in listdir(folder_path)]
+    filenames = [folder_path + file for file in listdir_nohidden(folder_path)]
     fronts = [HyperVolumeContainer(filename.split("/")[-1], file_reader(filename)) for filename in filenames]
     return HyperVolume(fronts)
