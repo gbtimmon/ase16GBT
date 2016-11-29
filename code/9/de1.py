@@ -9,7 +9,7 @@ def populate(problem, size):
     population = []
     # TODO 6: Create a list of points of length 'size'
     for _ in xrange(size):
-    	point = problem.generate_one()
+        point = problem.generate_one()
         problem.evaluate(point)
         population.append(point)
     return population
@@ -81,7 +81,7 @@ def de_1(mode, max_tries=3, frontier_size=5, f=0.75, cf=0.3, epsilon=0.01):
     frontier = populate(prob, frontier_size)
     
     for k in range(max_tries):
-        total,n = update_1(mode,f,cf,frontier)
+        total, n = update_1(mode,f,cf,frontier)
         if total/n > (1 - epsilon):
             break
 	
