@@ -14,14 +14,14 @@ def populate(problem, size):
         population.append(point)
     return population
     
-def update_1(mod, f, cf, frontier):
+def update(problem, f, cf, frontier):
     cur = []
     total = 0
     n = 0
-    for x in frontier:
-        s = x.score()
-        new = extrapolate_1(frontier, x, f, cf, mod)
-        if (new.score < s):
+    for point in frontier:
+        s = problem.score(point)
+        new = extrapolate(frontier, point, f, cf, problem)
+        if problem.score(new) < problem.score(point):
             print("+", end="")
             s = new.score
             frontier[i].copy(new)
@@ -31,18 +31,18 @@ def update_1(mod, f, cf, frontier):
             cur.append(s)
         total += s
         n += 1
-    return total,n
+    return total, n
 
 
-def extrapolate_1(frontier, one, f, cf, mod):
+def extrapolate(frontier, point, f, cf, problem):
     res = mod()
-    res.decisions = one.decisions
-    two, three, four = threeOthers(frontier, one.id)
+    res.decisions = point.decisions
+    two, three, four = threeOthers(frontier, point.id)
     ok = False
     while not ok:
         changed = False
-        for d in range(0,len(one.decisions)-1):
-            ran = random()
+        for d in range(0, len(point.decisions)-1):
+            ran = random.random()
             x, y, z = two.decisions[d], three.decisions[d], four.decisions[d]
             if ran < cf:
                 changed = True
@@ -50,7 +50,7 @@ def extrapolate_1(frontier, one, f, cf, mod):
                 ans = trim_1(new, d, mod)
                 #res.decisions = trim_1(new, d, mod)  # keep in range
         if not changed:
-            ran_index = randint(0, len(one) - 1)
+            ran_index = randint(0, len(point.decisions) - 1)
             res.candidates[ran_index] = two.candidates[ran_index]
         ok = res.check()
     return res
@@ -76,12 +76,12 @@ def threeOthers(frontier, avoid):
        oneOther(seen, selected)
     return selected[0], selected[1], selected[2]
     
-def de_1(mode, max_tries=3, frontier_size=5, f=0.75, cf=0.3, epsilon=0.01):
+def de(mode, max_tries=3, frontier_size=5, f=0.75, cf=0.3, epsilon=0.01):
     prob = GAProblem(mode, 4, 20)
     frontier = populate(prob, frontier_size)
     
     for k in range(max_tries):
-        total, n = update_1(mode,f,cf,frontier)
+        total, n = update(mode,f,cf,frontier)
         if total/n > (1 - epsilon):
             break
 	

@@ -31,7 +31,7 @@ class GAProblem(Problem):
             point.objectives = self.simulate(point.decisions)
         return point.objectives
 
-    def score(self):
+    def score(self, point):
         return point.objectives[0]
 
 if __name__ == "__main__":
