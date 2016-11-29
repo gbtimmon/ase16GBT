@@ -20,6 +20,7 @@ def create_decisions(num_decisions):
 
 class DTLZ1(Problem):
     def __init__(self, num_objectives=4, num_decisions=20):
+        self.name = "DTLZ1({0}, {1})".format(num_objectives, num_decisions)
         self.num_objectives = num_objectives
         self.num_decisions = num_decisions
         decisions = create_decisions(num_decisions)
@@ -51,6 +52,7 @@ class DTLZ1(Problem):
 
 class DTLZ3(Problem):
     def __init__(self, num_objectives=4, num_decisions=20):
+        self.name = "DTLZ3({0}, {1})".format(num_objectives, num_decisions)
         self.num_objectives = num_objectives
         self.num_decisions = num_decisions
         decisions = create_decisions(num_decisions)
@@ -85,6 +87,7 @@ class DTLZ3(Problem):
 
 class DTLZ5(Problem):
     def __init__(self, num_objectives=4, num_decisions=20):
+        self.name = "DTLZ5({0}, {1})".format(num_objectives, num_decisions)
         self.num_objectives = num_objectives
         self.num_decisions = num_decisions
         decisions = create_decisions(num_decisions)
@@ -121,6 +124,7 @@ class DTLZ5(Problem):
 
 class DTLZ7(Problem):
     def __init__(self, num_objectives=4, num_decisions=20):
+        self.name = "DTLZ7({0}, {1})".format(num_objectives, num_decisions)
         self.num_objectives = num_objectives
         self.num_decisions = num_decisions
         decisions = create_decisions(num_decisions)

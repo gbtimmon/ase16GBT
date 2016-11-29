@@ -7,6 +7,7 @@ from Model import *
 from DTLZ import *
 
 
+
 def refresh_objectives(problem, population):
     for i, obj in enumerate(problem.objectives):
         scores = [point.objectives[i] for point in population]
@@ -130,14 +131,38 @@ def nsgaii(pop_size=100, gens=250, mutation=0.01, crossover_rate=0.9, dom_func=b
     return initial_population, parents
 
 
-def write_results(filename, problem, final):
-    f = open(filename, 'w')
-    for i in xrange(len(problem.objectives)):
-        f.write(problem.objectives[i].name + "\n")
-        for j in xrange(len(final)):
-            f.write("{0} ".format(problem.objectives[i].normalize(final[j].objectives[i])))
+# def write_results(filename, problem, final):
+#     f = open(filename, 'w')
+#     f.write(problem.name + "\n")
+#     for i, point in enumerate(final):
+#         total = 0
+#         for j in xrange(len(problem.objectives)):
+#             total += problem.objectives[j].normalize(point.objectives[j])
+#         f.write("{0} ".format(total / len(problem.objectives)))
+#     f.write("\n")
+#     f.close()
+
+
+# in order to run hypervolume you need to write the results of at least 1 run of GA or NSGA
+def write_results(filename, problem, population):
+    refresh_objectives(problem, population)
+    f = open('Pareto_Fronts/' + filename, 'w')
+    for point in population:
+        for i, obj in enumerate(point.objectives):
+            f.write(str(problem.objectives[i].normalize(obj)) + " ")
         f.write("\n")
     f.close()
+
+
+# this will run hypervolume on all of the previously saved results in the Pareto Fronts folder
+# returns a list of hypervolumes
+def get_hypervolume_list():
+    from hypervolume_runner import HyperVolume_wrapper
+    hypervol = HyperVolume_wrapper()
+    # clean up files
+    for f in os.listdir('./Pareto_Fronts/'):
+        os.remove('./Pareto_Fronts/' + f)
+    return hypervol
 
 try:
     os.mkdir('results')
@@ -156,13 +181,29 @@ except Exception:
 # initial, final = ga(gens=50, problem=DTLZ3())
 # write_results('results/GA_DTLZ3.out', DTLZ3(), final)
 
-initial, final = nsgaii(gens=50, problem=DTLZ5(), dom_func=cdom)
-write_results('results/NSGA_DTLZ5.out', DTLZ5(), final)
+results_file = open('results/results.txt', 'w')
+
+print('NSGA_DTLZ5_BDOM')
+for i in xrange(10):
+    say("Run " + str(i + 1).zfill(2) + ": ")
+    problem = DTLZ5()
+    initial, final = nsgaii(gens=50, problem=problem, dom_func=bdom)
+    # writing results of the frontier for hypervol to calculate
+    write_results('NSGA_DTLZ5_{0}.txt'.format(i), problem, final)
+results_file.write('NSGA_DTLZ5_BDOM\n')
+h_list = get_hypervolume_list()
+for item in h_list:
+    results_file.write(str(item) + " ")
+results_file.flush()
+say("Hypervolumes: ")
+print(h_list)
+
+results_file.close()
 
 # initial, final = nsgaii(gens=50, problem=DTLZ7())
 # write_results('results/GA_DTLZ7.out', DTLZ7(), final)
 
-plot_pareto(initial, final)
+# plot_pareto(initial, final)
 
 
 
