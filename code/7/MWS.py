@@ -1,6 +1,6 @@
 from __future__ import print_function, unicode_literals
 from __future__ import absolute_import, division
-from random import random, randint
+from random import random, randint, seed
 from DTLZ7 import DTLZ7
 from Comparator import check_type1, check_type2
 
@@ -12,6 +12,7 @@ def mws(model, baseline):
         sLocal = model()
         sLocal.copy(sn)
         eLocal = sLocal.score()
+        # print(direction)
         for val in xrange(int(s.decisions[direction].lo / 100), int(s.decisions[direction].hi / 100)):
             sn.decisions[direction] = val* 100
             if not sn.check():
@@ -22,14 +23,15 @@ def mws(model, baseline):
         return sLocal
 
     # vars
-    maxTries = 20
-    maxChanges = 500
+    maxTries = 40
+    maxChanges = 250
     p = 0.5
     sb = model()
     sb.candidates = baseline.candidates[:]
     eb = 0
     prev = []
     lives = 5
+    seed(1)
 
     # retries
     for tries in xrange(0, maxTries):
@@ -74,4 +76,4 @@ def mws(model, baseline):
 
 
 if __name__ == "__main__":
-    mws(DTLZ7)
+    mws(DTLZ7, DTLZ7())

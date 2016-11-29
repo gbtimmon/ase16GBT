@@ -1,7 +1,7 @@
 from __future__ import print_function, unicode_literals
 from __future__ import division
 from DTLZ7 import DTLZ7
-from random import random, randint
+from random import random, randint, seed
 from Comparator import check_type1, check_type2
 
 
@@ -70,13 +70,13 @@ def threeOthers(frontier, avoid):
     return selected[0], selected[1], selected[2]
 
 
-def de(mode, baseline, max_tries=100, frontier_size=50, f=0.75, cf=0.3, epsilon=0.01):
+def de(mode, baseline, max_tries=500, frontier_size=20, f=0.75, cf=0.3, epsilon=0.01):
     # vars
     ib = 0
     frontier = [mode() for _ in range(frontier_size)]
     prev = []
-    lives = 5
-
+    lives = 20
+    seed(1)
     # eras
     for k in range(max_tries):
         frontier, cur = update(mode, f, cf, frontier)
@@ -108,6 +108,6 @@ def de(mode, baseline, max_tries=100, frontier_size=50, f=0.75, cf=0.3, epsilon=
 
 
 if __name__ == "__main__":
-    de(mode=DTLZ7)
+    de(DTLZ7, DTLZ7())
     # d = DTLZ7()
     # print(d.decisionSpace)
