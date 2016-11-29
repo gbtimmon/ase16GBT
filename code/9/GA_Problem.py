@@ -21,8 +21,9 @@ class GAProblem(Problem):
         Problem.__init__(self, decisions, objectives)
 
     def simulate(self, decisions):
-        inital, final, problem = ga(problem=dtlz_func(self.num_objectives, self.num_decisions),
-                             mutation=decisions[0], crossover=decisions[1], pop_size=decisions[3], gens=decisions[3])
+        problem = self.dtlz_func(self.num_objectives, self.num_decisions)
+        inital, final = ga(problem=problem, mutation=decisions[0], crossover_rate=decisions[1],
+                           pop_size=decisions[3], gens=decisions[3])
         # we would calculate hypervolume
         hypervolume = 0
         return [hypervolume]  # only need one objective due to no time

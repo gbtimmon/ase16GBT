@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from Model import *
 from de1 import de_1
 from hypervolume_runner import *
+from DTLZ import *
 
 def refresh_objectives(problem, population):
     for i, obj in enumerate(problem.objectives):
@@ -15,12 +16,9 @@ def refresh_objectives(problem, population):
         obj.low = min(obj.low, min(scores))
         obj.high = max(obj.high, max(scores))
 
-def ga(pop_size = 100, gens = 250):
-    from DTLZ import DTLZ1
-    problem = DTLZ1(4,20)
-    
-    #population = populate(problem, pop_size)
-    population = de_1(mode=DTLZ1)
+
+def ga(pop_size=100, gens=250, problem=DTLZ1, mutation=0.01, crossover_rate=0.9):
+    population = populate(problem, pop_size)
     [problem.evaluate(point) for point in population]
     initial_population = [point.clone() for point in population]
     gen = 0 
@@ -30,16 +28,16 @@ def ga(pop_size = 100, gens = 250):
         for _ in range(pop_size):
             mom = random.choice(population)
             dad = random.choice(population)
-            while (mom == dad):
+            while mom == dad:
                 dad = random.choice(population)
-            child = mutate(problem, crossover(mom, dad))
+            child = mutate(problem, crossover(mom, dad, crossover_rate), mutation)
             if problem.is_valid(child) and child not in population+children:
                 children.append(child)
         population += children
         population = elitism(problem, population, pop_size)
         gen += 1
     print("")
-    return initial_population, population, problem
+    return initial_population, population
 
 # in order to run hypervolume you need to write the results of at least 1 run of GA or NSGA
 def write_results(filename, problem, population):
