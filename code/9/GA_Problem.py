@@ -16,8 +16,8 @@ class GAProblem(Problem):
         self.dtlz_func = dtlz_func
         self.num_decisions = num_decisions
         self.num_objectives = num_objectives
-        decisions = self.create_decisions()
-        objectives = [Objective('Hypervolume')]  # ideally we would probably want spread an other metrics but no time
+        decisions = create_decisions()
+        objectives = [Objective('Hypervolume')]  # ideally we would probably want spread and other metrics but no time
         Problem.__init__(self, decisions, objectives)
 
     def simulate(self, decisions):
@@ -25,8 +25,9 @@ class GAProblem(Problem):
         inital, final = ga(problem=problem, mutation=decisions[0], crossover_rate=decisions[1],
                            pop_size=decisions[3], gens=decisions[3])
         # we would calculate hypervolume
-        hypervolume = 0
-        return [hypervolume]  # only need one objective due to no time
+        from ga import write_results, get_hypervolume_list
+        write_results('ga_results.txt', problem, final)
+        return get_hypervolume_list()  # only need one objective due to no time
 
     def evaluate(self, point):
         if not point.objectives:
