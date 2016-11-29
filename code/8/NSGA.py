@@ -145,6 +145,10 @@ def nsgaii(pop_size=100, gens=250, mutation=0.01, crossover_rate=0.9, dom_func=b
 
 # in order to run hypervolume you need to write the results of at least 1 run of GA or NSGA
 def write_results(filename, problem, population):
+    try:
+        os.mkdir('Pareto_Fronts')
+    except Exception:
+        pass
     refresh_objectives(problem, population)
     f = open('Pareto_Fronts/' + filename, 'w')
     for point in population:

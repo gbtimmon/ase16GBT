@@ -55,10 +55,6 @@ def HyperVolume(list_result_object):
 
 
 def HyperVolume_wrapper():
-    try:
-        os.mkdir('Pareto_Fronts')
-    except Exception:
-        pass
     folder_path = "./Pareto_Fronts/"
     from os import listdir
     filenames = [folder_path + file for file in listdir(folder_path)]
