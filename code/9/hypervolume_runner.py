@@ -1,6 +1,5 @@
-#		 Taken from: https://github.com/ai-se/Spread-HyperVolume/tree/master/HyperVolume
-
 from hypervolume import InnerHyperVolume
+import os
 
 class HyperVolumeContainer():
     def __init__(self, filename, results):
@@ -49,17 +48,19 @@ def HyperVolume(list_result_object):
     reference_point = [1.5 * max([one.get_reference_point()[i] for one in list_result_object]) for i in xrange(dimension)]
 
     HV = InnerHyperVolume(reference_point)
+    results = []
     for result_object in list_result_object:
-        result_object.hypervolume = HV.compute(result_object.results)
-        print result_object
+        results.append(HV.compute(result_object.results))
+    return results
 
 
 def HyperVolume_wrapper():
+    try:
+        os.mkdir('Pareto_Fronts')
+    except Exception:
+        pass
     folder_path = "./Pareto_Fronts/"
     from os import listdir
     filenames = [folder_path + file for file in listdir(folder_path)]
     fronts = [HyperVolumeContainer(filename.split("/")[-1], file_reader(filename)) for filename in filenames]
-    HyperVolume(fronts)
-
-
-HyperVolume_wrapper()
+    return HyperVolume(fronts)

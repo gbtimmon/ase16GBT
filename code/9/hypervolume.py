@@ -13,8 +13,6 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-#		 Taken from: https://github.com/ai-se/Spread-HyperVolume/tree/master/HyperVolume
 
 
 __author__ = "Simon Wessing"
@@ -292,3 +290,8 @@ if __name__ == "__main__":
     front = [[1,4], [2,2], [1,3], [4,1]]
     volume = hv.compute(front)
     print volume
+
+            
+            
+            
+        
