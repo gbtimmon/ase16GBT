@@ -31,29 +31,8 @@ def update(problem, f, cf, frontier):
     return total, n
 
 
-def extrapolate(frontier, point, f, cf, problem):
-    res = mod()
-    res.decisions = point.decisions
-    two, three, four = threeOthers(frontier, point.id)
-    ok = False
-    while not ok:
-        changed = False
-        for d in range(0, len(point.decisions)-1):
-            ran = random.random()
-            x, y, z = two.decisions[d], three.decisions[d], four.decisions[d]
-            if ran < cf:
-                changed = True
-                new = x + f * (y - z)
-                ans = trim_1(new, d, mod)
-                #res.decisions = trim_1(new, d, mod)  # keep in range
-        if not changed:
-            ran_index = randint(0, len(point.decisions) - 1)
-            res.candidates[ran_index] = two.candidates[ran_index]
-        ok = res.check()
-    return res
-    
-def trim_1(val,index,mode):
-    return max(0, min(index,1))
+def trim(val, index, problem):
+    return max(problem.decisions[index].low, min(val, problem.decisions[index].high))
 
 
 def threeOthers(frontier, avoid):
@@ -70,8 +49,30 @@ def threeOthers(frontier, avoid):
 
     #find three other objs in frontier
     while len(selected) < 3:
-       oneOther(seen, selected)
+        oneOther(seen, selected)
     return selected[0], selected[1], selected[2]
+
+
+def extrapolate(frontier, one, extrapolation_amount, crossover_freq, problem):
+    out = one.clone()
+    two, three, four = threeOthers(frontier, one.id)
+    ok = False
+    while not ok:
+        changed = False
+        for d in range(one.decisions):
+            ran = random.random()
+            x, y, z = two.decisions[d], three.decisions[d], four.decisions[d]
+            if ran < crossover_freq:
+                changed = True
+                new = x + extrapolation_amount * (y - z)
+                out.decisions[d] = trim(new, d, problem)
+        if not changed:
+            ran_index = randint(0, len(one.decisions) - 1)
+            out.decisions[ran_index] = two.decisions[ran_index]
+        problem.evaluate(out)
+        ok = problem.ok(out)
+    return out
+
     
 def de(mode, max_tries=3, frontier_size=5, f=0.75, cf=0.3, epsilon=0.01):
     prob = GAProblem(mode, 4, 20)
@@ -81,7 +82,6 @@ def de(mode, max_tries=3, frontier_size=5, f=0.75, cf=0.3, epsilon=0.01):
         total, n = update(prob,f,cf,frontier)
         if total/n > (1 - epsilon):
             break
-	
     return frontier
 
 

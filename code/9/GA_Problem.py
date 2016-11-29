@@ -34,6 +34,9 @@ class GAProblem(Problem):
     def score(self, point):
         return point.objectives[0]
 
+    def ok(self, point):
+        return True
+
 if __name__ == "__main__":
     prob = GAProblem(DTLZ1, 4, 20)
     point = prob.generate_one()
