@@ -32,7 +32,7 @@ class GAProblem(Problem):
         return point.objectives
 
     def score(self):
-	    return point.objectives
+	    return point.objectives[0]
 
 if __name__ == "__main__":
     prob = GAProblem(DTLZ1, 4, 20)
