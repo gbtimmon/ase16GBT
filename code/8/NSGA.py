@@ -210,7 +210,7 @@ if __name__ == "__main__":
                     h_list = get_hypervolume_list()
                     for item in h_list:
                         results_file.write(str(item) + " ")
-                        results_file.write("\n")
+                    results_file.write("\n")
                     results_file.flush()
                     say("Hypervolumes: ")
                     print(h_list)
