@@ -45,15 +45,22 @@ As seen in the results below, with each increase in objectives the score increas
 ![DTLZ 1 Results](http://i.imgur.com/r1ZaDPo.png)
 
 ### DTLZ 3
+With DTLZ 3 the results are a little more hazy. On average, the higher the number of objectives the better it performs but there were some outliars which did not perform the same. One example is 6 objectives and 40 decisions with cdom which performed much worse than all the other 6 objective runs. 
+
 ![DTLZ 3 Results](http://i.imgur.com/hTewiSb.png)
 
 ### DTLZ 5
+In the DTLZ 5 equation the clear winner for hypervolume scores was using two objectives which outperformed both 4 and 6 objectives for all number of decisions. Both 4 and 6 objectives performed about the same on average. 
+
 ![DTLZ 5 Results](http://i.imgur.com/chHsvuW.png)
 
 ### DTLZ 7
+Performance for DTLZ 7 was very similar across all numbers of objectives and decisions. This may be due to most of the objectives just using on value so there may not be as much variability. 
+
 ![DTLZ 7 Results](http://i.imgur.com/qbrxkEJ.png)
 
 ## Threats to Validity
+
 
 ## References
 [1] http://ieeexplore.ieee.org.prox.lib.ncsu.edu/document/996017/
