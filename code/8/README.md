@@ -38,6 +38,18 @@ In order to test how NSGA-II performs, a problem set must be created. The set mu
 
 ## Results
 
+### DTLZ 1
+![DTLZ 1 Results](http://i.imgur.com/r1ZaDPo.png)
+
+### DTLZ 3
+![DTLZ 3 Results](http://i.imgur.com/hTewiSb.png)
+
+### DTLZ 5
+![DTLZ 5 Results](http://i.imgur.com/chHsvuW.png)
+
+### DTLZ 7
+![DTLZ 7 Results](http://i.imgur.com/qbrxkEJ.png)
+
 ## Threats to Validity
 
 ## References
