@@ -13,7 +13,8 @@ def populate(problem, size):
         problem.evaluate(point)
         population.append(point)
     return population
-    
+
+
 def update(problem, f, cf, frontier):
     total = 0
     n = 0
@@ -59,7 +60,7 @@ def extrapolate(frontier, one, extrapolation_amount, crossover_freq, problem):
     ok = False
     while not ok:
         changed = False
-        for d in range(one.decisions):
+        for d in xrange(len(one.decisions)):
             ran = random.random()
             x, y, z = two.decisions[d], three.decisions[d], four.decisions[d]
             if ran < crossover_freq:

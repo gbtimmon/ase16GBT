@@ -14,7 +14,7 @@ class GAProblem(Problem):
         self.num_decisions = num_decisions
         self.num_objectives = num_objectives
         decisions = create_decisions()
-        objectives = [Objective('Hypervolume')]  # ideally we would probably want spread and other metrics but no time
+        objectives = [Objective('Hypervolume', do_minimize=False)]  # ideally we would probably want spread and other metrics but no time
         Problem.__init__(self, decisions, objectives)
 
     def simulate(self, decisions):
