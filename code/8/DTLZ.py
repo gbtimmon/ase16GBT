@@ -29,18 +29,19 @@ class DTLZ1(Problem):
 
     def simulate(self, decisions):
         def g():
-            total = 0
-            for i in xrange(len(decisions)):
-                total += ((decisions[i] - 0.5) ** 2 - math.cos(20 * math.pi * (decisions[i] - 0.5)))
-            return 100 * (self.num_decisions + total)
+            total = self.num_decisions - self.num_objectives + 1
+            for dec in decisions[self.num_objectives - 1:]:
+                total += ((dec - 0.5) ** 2 - math.cos(20 * math.pi * (dec - 0.5)))
+            return 100 * total
 
         objs = []
         for i in xrange(self.num_objectives):
 
             f1 = float(0.5 * (1 + g()))
-            for j in xrange(0, self.num_objectives - 1 - i):
-                f1 *= float(decisions[j])
-            f1 *= float(1 - float(decisions[self.num_objectives - 1 - i]))  # might be j? not sure
+            for x in decisions[:self.num_objectives - i + 1]:
+                f1 *= float(x)
+            if i != 0:
+                f1 *= (1 - decisions[self.num_objectives - 1])
             objs.append(f1)
         return objs
 
@@ -61,21 +62,21 @@ class DTLZ3(Problem):
 
     def simulate(self, decisions):
         def g():
-            total = 0
-            for i in xrange(len(decisions)):
-                total = total + (decisions[i] - 0.5) ** 2 - math.cos(20 * math.pi * (decisions[i] - 0.5))
-            return 100 * (self.num_decisions + total)
+            total = self.num_decisions - self.num_objectives + 1
+            for dec in decisions[self.num_objectives - 1:]:
+                total += ((dec - 0.5) ** 2 - math.cos(20 * math.pi * (dec - 0.5)))
+            return 100 * total
 
         objs = []
         for i in xrange(self.num_objectives):
 
             f1 = (1 + g())
-            for j in xrange(0, self.num_objectives - 1 - i):
-                f1 *= math.cos(decisions[j] * math.pi * 1 / 2)
-            if (i == 0):
-                f1 *= math.cos(decisions[j] * math.pi * 1 / 2)
+            for x in decisions[:self.num_objectives - 1 - i]:
+                f1 *= math.cos(x * math.pi * 1 / 2)
+            if i == 0:
+                f1 *= math.cos(decisions[self.num_objectives - 2] * math.pi * 1 / 2)
             else:
-                f1 *= math.sin(decisions[j] * math.pi * 1 / 2)
+                f1 *= math.sin(decisions[self.num_objectives - 2 - i + 1] * math.pi * 1 / 2)
             objs.append(f1)
         return objs
 
@@ -134,9 +135,9 @@ class DTLZ7(Problem):
     def simulate(self, decisions):
         def g():
             total = 0
-            for i in xrange(len(decisions)):
-                total += decisions[i]
-            return 1 + 9 / self.num_decisions * total
+            for dec in decisions[self.num_objectives - 1:]:
+                total += dec
+            return 1 + (9 / (self.num_decisions - self.num_objectives + 1) * total)
 
         def h(other_objectives):
             total = 0
@@ -145,8 +146,8 @@ class DTLZ7(Problem):
             return self.num_objectives - total
 
         objs = []
-        for i in xrange(self.num_objectives - 1):
-            objs.append(decisions[i])
+        for dec in decisions[:self.num_objectives - 1]:
+            objs.append(dec)
         objs.append((1 + g()) * h(objs))
         return objs
 

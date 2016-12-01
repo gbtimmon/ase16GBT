@@ -93,6 +93,8 @@ class Objective(O):
                    do_minimize=do_minimize, low=low, high=high)
 
     def normalize(self, val):
+        if self.high - self.low == 0:
+            return 0
         return (val - self.low) / (self.high - self.low)
 
 
@@ -231,17 +233,20 @@ def exp_loss(problem, i, x, y, n):
     return -1 * math.e**(w * (x - y) / n)
 
 
-def loss(problem, one, two):
+def loss(problem, x, y):
     losses = 0
-    n = min(len(one.objectives), len(two.objectives))
-    for i, (x1, y1) in enumerate(zip(one.objectives, two.objectives)):
-        x1 = problem.objectives[i].normalize(x1)
-        y1 = problem.objectives[i].normalize(y1)
+    n = min(len(x), len(y))
+    for i, (x1, y1) in enumerate(zip(x, y)):
         losses += exp_loss(problem, i, x1, y1, n)
     return losses / n  # return mean loss
 
 
-def cdom(problem, x, y):
+def cdom(problem, one, two):
+    x = []
+    y = []
+    for i, (xobj, yobj) in enumerate(zip(one.objectives, two.objectives)):
+        x.append(problem.objectives[i].normalize(xobj))
+        y.append(problem.objectives[i].normalize(yobj))
     l1 = loss(problem, x, y)
     l2 = loss(problem, y, x)
     return l1 < l2   # l1 is better if it losses least
@@ -296,14 +301,14 @@ def ga(pop_size=100, gens=250, dom_func=bdom, problem=POM3):
 def plot_pareto(initial, final):
     initial_objs = [point.objectives for point in initial]
     final_objs = [point.objectives for point in final]
-    initial_x = [i[1] for i in initial_objs]
-    initial_y = [i[2] for i in initial_objs]
-    final_x = [i[1] for i in final_objs]
-    final_y = [i[2] for i in final_objs]
+    initial_x = [i[0] for i in initial_objs]
+    initial_y = [i[1] for i in initial_objs]
+    final_x = [i[0] for i in final_objs]
+    final_y = [i[1] for i in final_objs]
     plt.scatter(initial_x, initial_y, color='b', marker='+', label='initial')
     plt.scatter(final_x, final_y, color='r', marker='o', label='final')
-    plt.title("Scatter Plot between initial and final population of GA")
-    plt.ylabel("Score")
-    plt.xlabel("Completion")
+    plt.title("Scatter Plot between initial and final population of NSGA-II")
+    plt.ylabel("Obj 2")
+    plt.xlabel("Obj 1")
     plt.legend(loc=9, bbox_to_anchor=(0.5, -0.175), ncol=2)
     plt.show()

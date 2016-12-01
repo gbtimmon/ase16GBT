@@ -7,12 +7,11 @@ from Model import *
 from DTLZ import *
 
 
-
 def refresh_objectives(problem, population):
     for i, obj in enumerate(problem.objectives):
         scores = [point.objectives[i] for point in population]
-        obj.low = min(obj.low, min(scores))
-        obj.high = max(obj.high, max(scores))
+        obj.low = min(scores)
+        obj.high = max(scores)
 
 
 def reproduce(problem, population, pop_size, mutation, crossover_rate):
@@ -31,6 +30,9 @@ def reproduce(problem, population, pop_size, mutation, crossover_rate):
 def fast_non_dominated_sort(problem, population, dom_func=bdom):
     fronts = []
     first_front = []
+    if dom_func == cdom:
+        [problem.evaluate(p) for p in population]
+        refresh_objectives(problem, population)
     for p in population:
         p.dom_set = []
         p.dom_count = 0
@@ -104,14 +106,14 @@ def select_parents(problem, fronts, pop_size):
 def nsgaii(pop_size=100, gens=250, mutation=0.01, crossover_rate=0.9, dom_func=bdom, problem=DTLZ1):
     population = populate(problem, pop_size)
     [problem.evaluate(point) for point in population]
-    if dom_func == cdom:
-        refresh_objectives(problem, population)
+    # if dom_func == cdom:
+    #     refresh_objectives(problem, population)
     initial_population = [point.clone() for point in population]
     fast_non_dominated_sort(problem, population, dom_func)
     children = reproduce(problem, population, pop_size, mutation, crossover_rate)
-    if dom_func == cdom:
-        [problem.evaluate(child) for child in children]
-        refresh_objectives(problem, children)
+    # if dom_func == cdom:
+    #     [problem.evaluate(child) for child in children]
+    #     refresh_objectives(problem, children)
     gen = 0
     while gen < gens:
         say(".")
@@ -120,9 +122,9 @@ def nsgaii(pop_size=100, gens=250, mutation=0.01, crossover_rate=0.9, dom_func=b
         parents = select_parents(problem, fronts, pop_size)
         population = children
         children = reproduce(problem, parents, pop_size, mutation, crossover_rate)
-        if dom_func == cdom:
-            [problem.evaluate(child) for child in children]
-            refresh_objectives(problem, children)
+        # if dom_func == cdom:
+        #     [problem.evaluate(child) for child in children]
+        #     refresh_objectives(problem, children)
         gen += 1
     union = population + children
     fronts = fast_non_dominated_sort(problem, union, dom_func)
@@ -153,7 +155,8 @@ def write_results(filename, problem, population):
     f = open('Pareto_Fronts/' + filename, 'w')
     for point in population:
         for i, obj in enumerate(point.objectives):
-            f.write(str(problem.objectives[i].normalize(obj)) + " ")
+            obj = problem.objectives[i].normalize(obj)
+            f.write(str(obj) + " ")
         f.write("\n")
     f.close()
 
@@ -168,56 +171,54 @@ def get_hypervolume_list():
         os.remove('./Pareto_Fronts/' + f)
     return hypervol
 
-try:
-    os.mkdir('results')
-except Exception:
-    pass
+if __name__ == "__main__":
+    try:
+        os.mkdir('results')
+    except Exception:
+        pass
 
-# initial, final = ga(gens=50, problem=DTLZ1())
-# write_results('results/GA_DTLZ1.out', DTLZ1(), final)
+    # problem = DTLZ7(4, 20)
+    # initial, final = nsgaii(gens=50, problem=problem, dom_func=cdom)
+    #
+    # refresh_objectives(problem, initial)
+    # for point in initial:
+    #     for i in xrange(len(problem.objectives)):
+    #         point.objectives[i] = problem.objectives[i].normalize(point.objectives[i])
+    #
+    #
+    # write_results('cdom_test', problem, final)
+    # print(get_hypervolume_list())
 
-# initial, final = nsgaii(problem=DTLZ1(), crossover_rate=1.0, mutation=(1 / 20.0), dom_func=cdom)
-# write_results('results/NSGA_DTLZ1.out', DTLZ1(), final)
+    results_file = open('results/results.txt', 'w')
+    obj_list = [2, 4, 6]
+    decisions_list = [10, 20, 40]
+    dom_func_list = [bdom, cdom]
+    prob_func_list = [DTLZ1, DTLZ3, DTLZ5, DTLZ7]
 
-# initial, final = ga(gens=50, problem=POM3())
-# write_results('results/GA_POM3.out', POM3(), final)
+    for prob in prob_func_list:
+        for func in dom_func_list:
+            for obj_num in obj_list:
+                for dec_num in decisions_list:
+                    print('NSGA_{3}_{2}({0}, {1})'.format(obj_num, dec_num, func.__name__, prob.__name__))
+                    for i in xrange(20):
+                        say("Run " + str(i + 1).zfill(2) + ": ")
+                        problem = prob(obj_num, dec_num)
+                        initial, final = nsgaii(gens=50, problem=problem, dom_func=func)
+                        # writing results of the frontier for hypervol to calculate
+                        write_results('NSGA_{1}_{0}.txt'.format(i, prob.__name__), problem, final)
+                    results_file.write('NSGA_{3}_{2}_{0}_{1}\n'.format(obj_num, dec_num, func.__name__, prob.__name__))
+                    h_list = get_hypervolume_list()
+                    for item in h_list:
+                        results_file.write(str(item) + " ")
+                        results_file.write("\n")
+                    results_file.flush()
+                    say("Hypervolumes: ")
+                    print(h_list)
+                    print()
 
-# initial, final = ga(gens=50, problem=DTLZ3())
-# write_results('results/GA_DTLZ3.out', DTLZ3(), final)
+    results_file.close()
 
-results_file = open('results/results.txt', 'w')
-obj_list = [2, 4, 6]
-decisions_list = [10, 20, 40]
-dom_func_list = [bdom, cdom]
-prob_func_list = [DTLZ1, DTLZ3, DTLZ5, DTLZ7]
-
-for prob in prob_func_list:
-    for func in dom_func_list:
-        for obj_num in obj_list:
-            for dec_num in decisions_list:
-                print('NSGA_{3}_{2}({0}, {1})'.format(obj_num, dec_num, func.__name__, prob.__name__))
-                for i in xrange(20):
-                    say("Run " + str(i + 1).zfill(2) + ": ")
-                    problem = prob(obj_num, dec_num)
-                    initial, final = nsgaii(gens=50, problem=problem, dom_func=func)
-                    # writing results of the frontier for hypervol to calculate
-                    write_results('NSGA_{1}_{0}.txt'.format(i, prob.__name__), problem, final)
-                results_file.write('NSGA_{3}_{2}_{0}_{1}\n'.format(obj_num, dec_num, func.__name__, prob.__name__))
-                h_list = get_hypervolume_list()
-                for item in h_list:
-                    results_file.write(str(item) + " ")
-                    results_file.write("\n")
-                results_file.flush()
-                say("Hypervolumes: ")
-                print(h_list)
-                print()
-
-results_file.close()
-
-# initial, final = nsgaii(gens=50, problem=DTLZ7())
-# write_results('results/GA_DTLZ7.out', DTLZ7(), final)
-
-# plot_pareto(initial, final)
+    # plot_pareto(initial, final)
 
 
 
