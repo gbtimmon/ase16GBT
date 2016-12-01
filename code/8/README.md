@@ -8,9 +8,11 @@ using two versions of comparisons: binary domination (bdom) and continuous domin
 of the DTLZ equations, models designed to test optimization algorithms.
 
 ## NSGA-II Algorithm
-The NSGA-II Algorithm is a multi-objective evolutionary algorithm (MOEA) that takes advantage of a fast non-dominated sorting approach[1].
+The NSGA-II Algorithm is a multi-objective evolutionary algorithm (MOEA) that takes advantage of a fast non-dominated sorting approach<sup>[1]</sup>.
 NSGA-II is an improvement to an original NSGA algorithm. NSGA-II uses crowding distance algorithm to find solutions that are densely 
 populated around a specific area and works to spread out the solutions across the objective space. 
+
+![NSGA-II Visualization](http://i.imgur.com/VkbVbTi.gif)
 ### Binary Domination with Cuboid Sorting
 
 ### Continuous Dominiation
