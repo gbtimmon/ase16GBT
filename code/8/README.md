@@ -18,6 +18,7 @@ populated around a specific area and works to spread out the solutions across th
 ### Continuous Dominiation
 
 ## DTLZ
+In order to test how NSGA-II performs, a problem set must be created. The set must also be flexible in its number of decisions and objectives in order to test different aspects of the optimizer. For such a purpose a test suite called DTLZ was created. DTLZ uses a variety of different functions to create different flexible scenarios to run an optimizer against.<sup>[2]</sup>
 
 ### DTLZ 1
 
@@ -41,3 +42,4 @@ populated around a specific area and works to spread out the solutions across th
 
 ## References
 [1] http://ieeexplore.ieee.org.prox.lib.ncsu.edu/document/996017/
+<br> [2] http://e-collection.library.ethz.ch/eserv/eth:24696/eth-24696-01.pdf
