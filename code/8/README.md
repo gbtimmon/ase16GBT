@@ -37,8 +37,11 @@ In order to test how NSGA-II performs, a problem set must be created. The set mu
 ![DTLZ 7](http://i.imgur.com/1kYWjEh.png)
 
 ## Results
+Across all DTLZ models the scores between binary domination and continuous domination are fairly similar. With 20 retries the differences seem to be negligible. The hypervolume averages below have been normalized by dividing each hypervolume by the number of objectives that were tested as the hypervolume would grow with an increased number of objectives. Even after normalized most of the Hypervolume scores were better for higher number of objectives. 
 
 ### DTLZ 1
+As seen in the results below, with each increase in objectives the score increases as well, even after normalizing across objectives. For this problem set the number of decisions does not play a significant role in the difference of scores.
+
 ![DTLZ 1 Results](http://i.imgur.com/r1ZaDPo.png)
 
 ### DTLZ 3
