@@ -21,11 +21,19 @@ populated around a specific area and works to spread out the solutions across th
 
 ### DTLZ 1
 
+![DTLZ 1](http://i.imgur.com/ZFzvySo.png)
+
 ### DTLZ 3
+
+![DTLZ 3](http://i.imgur.com/p3i6aut.png)
 
 ### DTLZ 5
 
+![DTLZ 5](http://i.imgur.com/4vflqVj.png)
+
 ### DTLZ 7
+
+![DTLZ 7](http://i.imgur.com/1kYWjEh.png)
 
 ## Results
 
