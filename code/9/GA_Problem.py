@@ -37,6 +37,9 @@ class GAProblem(Problem):
     def ok(self, point):
         return True
 
+    def better(self, p1, p2):
+        return self.score(p1) > self.score(p2)
+
 if __name__ == "__main__":
     prob = GAProblem(DTLZ1, 4, 20)
     point = prob.generate_one()
