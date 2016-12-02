@@ -83,17 +83,29 @@ def extrapolate(frontier, one, extrapolation_amount, crossover_freq, problem):
 def de(mode, max_tries=3, frontier_size=5, f=0.75, cf=0.3, epsilon=0.01):
     prob = GAProblem(mode, 4, 20)
     frontier = populate(prob, frontier_size)
-    print(frontier)
+    initial_pop = [point.clone() for point in frontier]
     
     for _ in range(max_tries):
-        total, n = update(prob, f, cf, frontier)
-        # if total/n > (1 - epsilon):
-        #     break
-    return frontier
+        update(prob, f, cf, frontier)
+    return initial_pop, frontier
 
 
 if __name__ == "__main__":
-    d = de(mode=DTLZ1, max_tries=10)
-    print(d)
-    #d = DTLZ7()
-    #print(d.decisionSpace)
+    initial, final = de(mode=DTLZ1, max_tries=10)
+    print(final)
+
+    print("Initial:")
+    for i, point in enumerate(initial):
+        print("P{0}: {1}".format(i, point.decisions))
+
+    for point in initial:
+        say(str(point.objectives[0]) + " ")
+    print()
+
+    print("Final")
+    for i, point in enumerate(final):
+        print("P{0}: {1}".format(i, point.decisions))
+
+    for point in final:
+        say(str(point.objectives[0]) + " ")
+    print()
