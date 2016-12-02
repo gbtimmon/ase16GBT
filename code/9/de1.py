@@ -5,6 +5,7 @@ from math import pi, fabs, sin
 from DTLZ import DTLZ1
 from GA_Problem import *
 
+
 def populate(problem, size):
     population = []
     # TODO 6: Create a list of points of length 'size'
@@ -19,15 +20,15 @@ def update(problem, f, cf, frontier):
     total = 0
     n = 0
     for point in frontier:
-        s = problem.score(point)
         new = extrapolate(frontier, point, f, cf, problem)
-        if problem.score(new) < problem.score(point):
+        problem.evaluate(new)
+        if problem.better(new, point):
             print("+", end="")
-            s = problem.score(new)
-            frontier.copy(new)
+            point.decisions = new.decisions
+            point.objectives = new.objectives
         else:
-            print(".", end="")
-        total += s
+            print("-", end="")
+        total += problem.score(point)
         n += 1
     return total, n
 
@@ -36,27 +37,30 @@ def trim(val, index, problem):
     return max(problem.decisions[index].low, min(val, problem.decisions[index].high))
 
 
-def threeOthers(frontier, avoid):
-    def oneOther(seen, selected):
-        pick_index = randint(0, len(frontier) - 1)
-        if pick_index not in seen:
-            seen.append(pick_index)
-            selected.append(frontier[pick_index])
-    # vars
-    seen = []
-    seen.append(avoid)
-    i = 0
-    selected = []
+def three_others(frontier, avoid):
+    def n(max_val):
+        return int(random.uniform(0, max_val))
 
-    #find three other objs in frontier
-    while len(selected) < 3:
-        oneOther(seen, selected)
-    return selected[0], selected[1], selected[2]
+    def a(lst):
+        return lst[n(len(lst))]
+
+    def one_other():
+        x = avoid
+        while x in seen:
+            x = a(frontier)
+        seen.append(x)
+        return x
+
+    seen = [avoid]
+    this = one_other()
+    that = one_other()
+    the_other_thing = one_other()
+    return this, that, the_other_thing
 
 
 def extrapolate(frontier, one, extrapolation_amount, crossover_freq, problem):
     out = one.clone()
-    two, three, four = threeOthers(frontier, one.id)
+    two, three, four = three_others(frontier, one)
     ok = False
     while not ok:
         changed = False
@@ -72,22 +76,24 @@ def extrapolate(frontier, one, extrapolation_amount, crossover_freq, problem):
             out.decisions[ran_index] = two.decisions[ran_index]
         problem.evaluate(out)
         ok = problem.ok(out)
+    out.objectives = []
     return out
 
     
 def de(mode, max_tries=3, frontier_size=5, f=0.75, cf=0.3, epsilon=0.01):
     prob = GAProblem(mode, 4, 20)
     frontier = populate(prob, frontier_size)
+    print(frontier)
     
-    for k in range(max_tries):
-        total, n = update(prob,f,cf,frontier)
-        if total/n > (1 - epsilon):
-            break
+    for _ in range(max_tries):
+        total, n = update(prob, f, cf, frontier)
+        # if total/n > (1 - epsilon):
+        #     break
     return frontier
 
 
 if __name__ == "__main__":
-    d = de(mode=DTLZ1)
+    d = de(mode=DTLZ1, max_tries=10)
     print(d)
     #d = DTLZ7()
     #print(d.decisionSpace)
