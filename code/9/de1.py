@@ -4,6 +4,7 @@ from random import random, randint
 from math import pi, fabs, sin
 from DTLZ import DTLZ1
 from GA_Problem import *
+from ga import *
 
 
 def populate(problem, size):
@@ -92,20 +93,42 @@ def de(mode, max_tries=3, frontier_size=5, f=0.75, cf=0.3, epsilon=0.01):
 
 if __name__ == "__main__":
     initial, final = de(mode=DTLZ1, max_tries=10)
-    print(final)
+
+    f = open("results.txt", 'w')
+
+    print("Baseline:")
+    f.write(str("Baseline\n"))
+    for i in xrange(5):
+        problem = DTLZ1(4, 20)
+        ga_initial, ga_final = ga(problem=problem)
+        write_results("ga{0}.txt".format(i), problem, ga_final)
+    lst = get_hypervolume_list()
+    for item in lst:
+        say(str(item) + " ")
+        f.write(str(item) + " ")
+    print()
+    f.write(str('\n'))
 
     print("Initial:")
+    f.write(str("initial\n"))
     for i, point in enumerate(initial):
         print("P{0}: {1}".format(i, point.decisions))
 
     for point in initial:
         say(str(point.objectives[0]) + " ")
+        f.write(str(point.objectives[0]) + " ")
     print()
+    f.write(str('\n'))
 
     print("Final")
+    f.write(str("Final\n"))
     for i, point in enumerate(final):
         print("P{0}: {1}".format(i, point.decisions))
 
     for point in final:
         say(str(point.objectives[0]) + " ")
+        f.write(str(point.objectives[0]) + " ")
     print()
+    f.write(str('\n'))
+
+    f.close()
