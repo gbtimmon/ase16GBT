@@ -117,6 +117,41 @@ Type3 operator was implemented to compare the final eras between multiple optimi
     Statistical Analysis of Scott-Knott,a12 and rank the optimizers
 ```
 
+### Continuous Domination [3]
+
+What _cdom_ does is that it takes the differences between each objective, then
+raises it to a exponential factor. From this we compute the mean loss the loss in travelling
+Formally, this is a domination test across the Pareto frontier.
+
+```python
+def (i):      # return less for minimize and more for maximize
+def norm(i,x): # returns (x - lo) / (hi - lo) where lo and hi
+               # are the min,max values for objective i
+
+def better(this, that):
+  x  = scores[ id(this) ]
+  y  = scores[ id(that) ]
+  l1 = loss(x,y)
+  l2 = loss(y,x)
+  return l1 < l2 # this is better than that if this losses least.
+
+def loss(x, y):
+  losses= 0
+  n = min(len(x),len(y))
+  for i,(x1,y1) in enumerate(zip(x,y)):
+    x1 = norm(i,x1) # normalization
+    y1 = norm(i,y1) # normalization
+    losses += expLoss( i,x1,y1,n )
+  return losses / n  # return mean loss
+
+def expLoss(i,x1,y1,n):
+  "Exponentially shout out the difference"
+  w = -1 if minimizing(i) else 1 # adjust for direction of comparison
+  return -1*math.e**( w*(x1 - y1) / n ) # raise the differences to some exponent
+```  
+
+
+
 ### Scott-knott
 
 The Scott & Knott method make use of a cluster analysis algorithm, where, starting from the whole group of observed mean effects, it divides, and keep dividing the sub-groups in such a way that the intersection of any two groups formed in that manner is empty [2]
@@ -124,39 +159,53 @@ The Scott & Knott method make use of a cluster analysis algorithm, where, starti
 ## Results
 
 ### Counts of Earlty termination
-| Optimizer | Number of  eras before termination  |
-|-----------|-------------------------------------|
-| SA        | 18                                  |
-| MWS       | 11                                  |
-| DE        | 16                                  |
+| Optimizer | Avg. No. eras before termination |
+|-----------|----------------------------------|
+| SA        | 13.6                             |
+| MWS       | 14.6                             |
+| DE        | 13.9                             |
 
-As shown in the table, Simulated Annealing has the lowest number of early termination, which suggests that the algorithm takes the most generation to search and find the best result. On the other hand, Differential Evolution has every try early terminated. As the only algorithm keeping a population frontier, it is highly efficient in searching the landscape.
+As shown in the table, Simulated Annealing has the smallest number of early termination. However, Simulated Anealing is continuously updating just one candidate by jumping randomly. It's doubtful that Simulated Anealing may not be able to get a better value and then keeping it's current value for a long time and in the end early terminated. 
+
+For the other two algorithm:
+
+- Differential Evolution is keeping a population with size of 50. The quality of each candidate will get update in each era which is not helping it to terminate quicker than Simulated Annealing. 
+
+- Max-WalkSat will do local search at a probability after the random jump, which will give it higher possibility to get a better value while searching. By frequently updating the solution, it will continuously getting more lives and as a result, hard to early terminate. 
+
 
 ### Comparison of three optimizers depending on the cdom loss
+
 ```
 rank ,         name ,    med   ,  iqr 
 ----------------------------------------------------
-   1 ,           de ,    0.13  ,  0.53 (-*---          |              ), 0.06,  0.15,  0.60
-   1 ,          mws ,    0.25  ,  0.49 (--*--          |              ), 0.09,  0.29,  0.59
-   1 ,           sa ,    0.74  ,  0.76 (  ----*--      |              ), 0.26,  0.78,  1.03
+   1 ,           de ,    -1.70  ,  1.04 (               |     --*---   ), -2.06,  -1.69,  -1.03
+   1 ,           sa ,    -1.35  ,  0.93 (               |      ----*   ), -2.01,  -1.31,  -1.08
+   1 ,          mws ,    -1.29  ,  0.50 (               |         -*-  ), -1.44,  -1.28,  -0.94
 
 rank ,         name ,    med   ,  iqr 
 ----------------------------------------------------
-   1 ,          mws ,    0.39  ,  0.81 ( --*----       |              ), 0.21,  0.39,  1.02
-   1 ,           de ,    0.56  ,  0.94 ( ---*---       |              ), 0.17,  0.57,  1.11
-   1 ,           sa ,    0.78  ,  1.65 (------*------  |              ), 0.06,  0.83,  1.71
+   1 ,           de ,    -1.35  ,  1.52 (               |           --*), -2.57,  -1.35,  -1.05
+   1 ,           sa ,    -1.32  ,  1.10 (               |            -*), -2.15,  -1.30,  -1.04
+   1 ,          mws ,    -1.06  ,  1.05 (               |            -*), -1.95,  -1.03,  -0.91
 
 rank ,         name ,    med   ,  iqr 
 ----------------------------------------------------
-   1 ,          mws ,    0.27  ,  1.32 (-*-------      |              ), 0.09,  0.28,  1.41
-   1 ,           sa ,    0.38  ,  2.37 (--*------------|              ), 0.09,  0.43,  2.45
-   1 ,           de ,    0.70  ,  1.01 (  --*----      |              ), 0.36,  0.74,  1.37
+   1 ,           sa ,    -1.49  ,  1.28 (               |     ----*--  ), -2.15,  -1.47,  -0.88
+   1 ,           de ,    -1.35  ,  0.96 (               |     ----*-   ), -2.05,  -1.33,  -1.09
+   1 ,          mws ,    -1.21  ,  0.61 (               |        --*   ), -1.57,  -1.19,  -0.96
 
-
-   
 ```
 
 As shown in the table, Differential Evolution works best on DTLZ 7 with 2 objectives and 10 decisions followed by Max-WalkSat then Simulated Annealing. Since we are comparing continuous domination loss numbers generated between the first era and final era, this indicates that DE produces the best loss.
+
+As shown in the table, all three algorithms have the same rank with each of them doing good in different areas.
+
+- Simulated Annealing: as discussed above, it has the smallest number of eras to get early terminated. However, as can be seen in the table, the results in each repeat of Simulated Anealing is quite wide spreaded, which suggests that the algorithm is not very stable. 
+
+- Max-WalkSat on the other hand, it very stable. All of the results tend to fall in a pretty narrow range. However, the performance of Max-WalkSat is not as good as expected. This may due to the limited number of eras provided in the experiment or a bad luck.
+
+- Differential Evolution: the performance of Differential Evolution is pretty good. It is not as stable as Max-WalkSat because each individual inside the population follow their own ways to mutate, which is time consuming to get convergence (move to heaven). However, when more eras is given, the performance of Differential Evolution is expected to be increasingly better. The reason is Differential Evolution explore the landscape, or the problem, better than the other two single objective algorithms.
 
 ## Threats to Validity
 
@@ -184,4 +233,5 @@ As shown in the table, Differential Evolution works best on DTLZ 7 with 2 object
 ## Reference
 [1] https://github.com/txt/ase16/blob/master/src/stats.py
 <br>[2] https://rdrr.io/cran/ScottKnott/man/ScottKnott-package.html
+<br>[3] https://github.com/txt/ase16/blob/master/doc/perform.md
 
