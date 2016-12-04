@@ -1,6 +1,7 @@
 # Optimizing the Optimizer: Using DE to optimize GA
 
 ## Abstract
+In this homework we were asked to use Differential Evolution to optimize default values for a Genetic Algorithm so it would produce better solutions in it's optimization. We hooked GA into the Problem workshop code from previous classes and used that to run DE. In our results we found that the tuned GA ran significantly better than the untuned GA. However, we are worried that limiting the population size and number of retries for our DE may have limited the potential of our solutions. 
 
 ## Introduction
 In this part of the homework the goal was to optimize the defaults of the Genetic Algorithm (GA) by running it through an instance of differential evolution. We hypothesize that by tuning the GA it will perform better against an untuned version of the GA with the usual defaults. 
@@ -8,9 +9,11 @@ In this part of the homework the goal was to optimize the defaults of the Geneti
 ## DE
 Differential Evolution is a multi objective optimizer. It optimizes a problem by maintaining a population of candidate solutions and improving it. In order to optimize problems, DE treats the problem as a black box and uses the quality measurements provided by the problem itself to determine whether a solution is better than a previous solution<sup>[1]</sup>. 
 
+For our implementation of DE we would extrapolate a new solution based on the other candidates in the population. By selecting 3 other solutions we could come up with a new decision that was random but loosly based on other candidates so we don't have to reinvent the wheel in finding good new solutions. However, we were able to overcome local optima by adding in the random jump in decision space.
+
 ## GA
 
-For this problem we used the Genetic Algorithm provided in the code workshop as our basis of the problem. We configured a Problem to take on a GA. The decisions we optimized for were mutation rate, crossover rate, population size and number of generations.
+For this problem we used the Genetic Algorithm provided in the code workshop as our basis of the problem. We configured a Problem to take on a GA. The decisions we optimized for were mutation rate, crossover rate, population size and number of generations. On a baseline run of GA the defaults we use are 0.01 for mutation rate, 0.9 for crossover rate, 100 for population size and 250 for generations.
 
 For mutation rate we decided on a range between 0.01 and 0.1. We decided to keep the mutation rate somewhat lower so it wouldn't be mutating the entire population and throwing away any progress towards an ideal solution. We varied the crossover rate between 0.1 and 1.0. We felt that any range of crossover could produce different kinds of results. If we had a slowly changing population it might choose other factors to optimize for. 
 
