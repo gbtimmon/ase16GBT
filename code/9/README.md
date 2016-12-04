@@ -10,7 +10,11 @@ Differential Evolution is a multi objective optimizer. It optimizes a problem by
 
 ## GA
 
-For this problem we used the Genetic Algorithm provided in the code workshop as our basis of the problem. We configured a Problem to take on a GA. The decisions we optimized for were mutation rate, crossover rate, population size and number of generations. For mutation rate we decided on a range between 0.01 and 0.1. We decided to keep the mutation rate somewhat lower so it wouldn't be mutating the entire population and throwing away any progress towards an ideal solution. We varied the crossover rate between 0.1 and 1.0. We felt that any range of crossover could produce different kinds of results. If we had a slowly changing population it might choose other factors to optimize for. For population size we went with a range between 20 and 200. We wanted the population to have a large enough size to effectively crossover between, but we also wanted to keep it under 200 to help limit the runtime for the problem. Finally we decided on a range of 10 and 250 for the number of generations. We were curious to see if limiting the number of generations would have an effect on how well the solutions would perform but we also didn't want to use too many generations in the interest of limiting runtime. 
+For this problem we used the Genetic Algorithm provided in the code workshop as our basis of the problem. We configured a Problem to take on a GA. The decisions we optimized for were mutation rate, crossover rate, population size and number of generations.
+
+For mutation rate we decided on a range between 0.01 and 0.1. We decided to keep the mutation rate somewhat lower so it wouldn't be mutating the entire population and throwing away any progress towards an ideal solution. We varied the crossover rate between 0.1 and 1.0. We felt that any range of crossover could produce different kinds of results. If we had a slowly changing population it might choose other factors to optimize for. 
+
+For population size we went with a range between 20 and 200. We wanted the population to have a large enough size to effectively crossover between, but we also wanted to keep it under 200 to help limit the runtime for the problem. Finally we decided on a range of 10 and 250 for the number of generations. We were curious to see if limiting the number of generations would have an effect on how well the solutions would perform but we also didn't want to use too many generations in the interest of limiting runtime. 
 
 ```python
     def simulate(self, decisions):
