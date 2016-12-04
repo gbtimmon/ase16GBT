@@ -70,13 +70,14 @@ def threeOthers(frontier, avoid):
     return selected[0], selected[1], selected[2]
 
 
-def de(mode, baseline, max_tries=500, frontier_size=20, f=0.75, cf=0.3, epsilon=0.01):
+def de(mode, baseline, max_tries=20, frontier_size=25, f=0.75, cf=0.3, epsilon=0.01):
     # vars
     ib = 0
     frontier = [mode() for _ in range(frontier_size)]
     prev = []
-    lives = 20
-    seed(1)
+    lives = 10
+    a = randint(1, 20)
+    seed(a)
     # eras
     for k in range(max_tries):
         frontier, cur = update(mode, f, cf, frontier)

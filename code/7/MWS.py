@@ -23,16 +23,17 @@ def mws(model, baseline):
         return sLocal
 
     # vars
-    maxTries = 40
-    maxChanges = 250
+    maxTries = 20
+    maxChanges = 50
     p = 0.5
     sb = model()
     sb.candidates = baseline.candidates[:]
     eb = 0
     prev = []
     lives = 5
-    seed(1)
-
+    a = randint(1, 20)
+    seed(a)
+    era = 1
     # retries
     for tries in xrange(0, maxTries):
         cur = []
@@ -66,7 +67,8 @@ def mws(model, baseline):
             print("\n no changing detected, early terminating program")
             break
 
-        print("Current Best solution: %s, " %sb.candidates,"\nf1 and f2: %s, " %sb.fi(), ", at which eval the best x is found: %s" %eb )
+        print("Era: %s" %era, "Current Best solution: %s, " %sb.candidates,"\nf1 and f2: %s, " %sb.fi(), ", at which eval the best x is found: %s" %eb )
+        era = era + 1
 
 
     print("Best solution found: %s, " %sb.candidates,"\nf1 and f2: %s, " %sb.fi(), ", at which eval the best x is found: %s" %eb )

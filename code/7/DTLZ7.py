@@ -1,6 +1,6 @@
 from __future__ import absolute_import, division
 from __future__ import print_function, unicode_literals
-from math import pi, fabs, sin
+from math import pi, fabs, sin, e
 from Model import Model, Decisions, Objectives
 from sys import stdout, maxint
 
@@ -59,7 +59,9 @@ class DTLZ7(Model):
     def cdom(self, other):
         def loss(xl, yl):
             n = len(xl)
-            allloss = [pow((xi-yi)/n,2) for xi,yi in zip(xl,yl)]
+            # allloss = [pow((xi-yi)/n,2) for xi,yi in zip(xl,yl)]
+            allloss = [-1 * e**(-1 * (xi - yi) / n) for xi,yi in zip(xl,yl)]
+
             return sum(allloss)/n
 
         x_objs = self.fi()

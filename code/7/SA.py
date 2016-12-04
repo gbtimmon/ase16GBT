@@ -1,6 +1,6 @@
 from __future__ import print_function, unicode_literals
 from __future__ import absolute_import, division
-from random import random, seed
+from random import random, seed, randint
 from sys import stdout, maxint
 from math import exp, fabs
 from DTLZ7 import DTLZ7
@@ -39,7 +39,8 @@ def sa(model, baseline):
     lives = 5
 
     # iteration through eras
-    seed(1)
+    a = randint(1, 20)
+    seed(a)
     for k in xrange(1, kmax):
         T = (k / kmax)
         sn = model()
