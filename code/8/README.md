@@ -1,6 +1,7 @@
 # Implementation of NSGA-II
 
 ## Abstract
+Homework 8 involves implementing the NSGA-II algorithm using both Binary and Continuous domination methods. The goal was to test which one performed better across a selection of DTLZ test problems. After running the optimizer over both domination methods using DTLZ 1, 3, 5, and 7 with 2, 4, and 6 objectives along with 10, 20, and 40 decisions, we found that there was not much difference in performance between binary and continuous domination tactics. This goes against our hypothesis that continuous domination would out perform binary domination as the number of objectives increased in each problem space. In the future we think that significantly increasing the objective space may lead to more significantly different solutions as binary domination will struggle to produce valuable results across so many objectives. 
 
 ## Introduction
 In this section of Homework the goal was to implement our own version of NSGA-II using knowledge from lectures and implement it
