@@ -117,11 +117,11 @@ Type3 operator was implemented to compare the final eras between multiple optimi
     Statistical Analysis of Scott-Knott,a12 and rank the optimizers
 ```
 
-### Continuous Domination [3]
+### Continuous Domination 
 
 What _cdom_ does is that it takes the differences between each objective, then
 raises it to a exponential factor. From this we compute the mean loss the loss in travelling
-Formally, this is a domination test across the Pareto frontier.
+Formally, this is a domination test across the Pareto frontier. [2]
 
 ```python
 def (i):      # return less for minimize and more for maximize
@@ -154,7 +154,7 @@ def expLoss(i,x1,y1,n):
 
 ### Scott-knott
 
-The Scott & Knott method make use of a cluster analysis algorithm, where, starting from the whole group of observed mean effects, it divides, and keep dividing the sub-groups in such a way that the intersection of any two groups formed in that manner is empty [2]
+The Scott & Knott method make use of a cluster analysis algorithm, where, starting from the whole group of observed mean effects, it divides, and keep dividing the sub-groups in such a way that the intersection of any two groups formed in that manner is empty [3]
 
 ## Results
 
@@ -232,6 +232,7 @@ As shown in the table, all three algorithms have the same rank with each of them
 
 ## Reference
 [1] https://github.com/txt/ase16/blob/master/src/stats.py
-<br>[2] https://rdrr.io/cran/ScottKnott/man/ScottKnott-package.html
-<br>[3] https://github.com/txt/ase16/blob/master/doc/perform.md
+<br>[2] https://github.com/txt/ase16/blob/master/doc/perform.md
+<br>[3] https://rdrr.io/cran/ScottKnott/man/ScottKnott-package.html
+
 
