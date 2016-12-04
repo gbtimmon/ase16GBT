@@ -126,6 +126,13 @@ Despite having findings in our process of implementing NSGA-II there may be thre
 
 Another potential threat was the use of only one metric to test whether a solution was good or not. Due to time constraints our team only implemented the hypervolume metric, while a good indicator of a successfully formed pareto frontier, may not be capable of telling the whole story alone. Metrics like spread and igd would be helpful to determine whether a set of candidate solutions were evenly distributed along the pareto frontier and close to an ideal solution<sup>[4]</sup>. Without this information we don't have a complete picture on whether our results are truly the best of the best when it comes to finding ideal candidate solutions. 
 
+## Future Work
+The most immediate future work that needs focus is to continue to increase the number of objectives in the problem space to see if continuious domination will emerge as a clear leader in comparison methods. We felt that in order really see how they perform we should significantly ramp up the number of objectives to something like 20 - 30 to really strain the comparison methods. We predict that with that many objectives it would be difficult to totally dominate another solution using bdom and the continuous domination method might offer a better way to sort through the solutions. 
+
+Another area to perform future work is to increase the number of metrics to analyze the solutions. With only hypervolume we will not have a complete picture of the problem space. Adding spread and igd will help to complete the picture.
+
+Finally, we think that a comparison between time and strength of solutions would be something worth investigating. Perhaps while running NSGA-II each generation of solutions could be saved and compared with other generations over time. Our prediction is that there is a sweetspot of generations that will really help to balance the time investment with the solution space and would produce something good enough without being the best it could produce. Perhaps an easier path would be to vary the number of generations in addition to varying the objectives and decisions. 
+
 ## References
 [1] http://ieeexplore.ieee.org.prox.lib.ncsu.edu/document/996017/
 <br> [2] http://e-collection.library.ethz.ch/eserv/eth:24696/eth-24696-01.pdf
