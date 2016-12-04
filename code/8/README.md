@@ -14,6 +14,34 @@ populated around a specific area and works to spread out the solutions across th
 
 ![NSGA-II Visualization](http://i.imgur.com/VkbVbTi.gif)
 ### Binary Domination with Cuboid Sorting
+In binary domination a candidate dominates another candidate when a few things happen:
+
+* If at least one objective score is better
+* No objective is worse than the other candidate
+
+The following code is an excerpt of the binary domination algorithm from our project<sup>[3]</sup>:
+
+```python
+def bdom(problem, one, two):
+    """
+    Return if one dominates two based
+    on binary domintation
+    """
+    objs_one = problem.evaluate(one)
+    objs_two = problem.evaluate(two)
+    dominates = False
+    for i, obj in enumerate(problem.objectives):
+        better = lt if obj.do_minimize else gt
+        if better(objs_one[i], objs_two[i]):
+            dominates = True
+        elif objs_one[i] != objs_two[i]:
+            return False
+    return dominates
+```
+
+The code starts by evaluating each objective in order to obtain the latest score for each objective. Then the code iterates through each objective in the problem and tests whether the score of the first candidate is better than the score of the second. If it is then dominates is marked as True. However, if there is a case where the objectives fail the better test and are not equal that means that an objective on the second candidate is better than the first so the domination will fail immediately by returning False.  
+
+
 
 ### Continuous Dominiation
 
@@ -65,3 +93,4 @@ Performance for DTLZ 7 was very similar across all numbers of objectives and dec
 ## References
 [1] http://ieeexplore.ieee.org.prox.lib.ncsu.edu/document/996017/
 <br> [2] http://e-collection.library.ethz.ch/eserv/eth:24696/eth-24696-01.pdf
+<br> [3] Binary Domination code taken from GA class workshop
