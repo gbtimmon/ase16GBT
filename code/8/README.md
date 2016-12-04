@@ -85,17 +85,25 @@ In order to test how NSGA-II performs, a problem set must be created. The set mu
 
 ![DTLZ 1](http://i.imgur.com/ZFzvySo.png)
 
+The difficulty of DTLZ 1, whose functions are listed above, is to converge onto the hyper-plane<sup>[2]</sup>. 
+
 ### DTLZ 3
 
 ![DTLZ 3](http://i.imgur.com/p3i6aut.png)
+
+DTLZ 3's functions are listed above. The design of these functions are to introduce many local Pareto-optimal fronts that are parallel to the global front where an optimizer may get stuck<sup>[2]</sup>. 
 
 ### DTLZ 5
 
 ![DTLZ 5](http://i.imgur.com/4vflqVj.png)
 
+DTLZ 5 was designed to test whether an optimizer could converge on a curve. It also allows for an easier way to visually demonstrate it's performance by plotting f<sub>M</sub>(shown above) with any other objective function<sup>[2]</sup>.
+
 ### DTLZ 7
 
 ![DTLZ 7](http://i.imgur.com/1kYWjEh.png)
+
+DTLZ 7 is unique because it offers 2<sup>M-1</sup> disconnected Pareto-optimal regions in the space. The problem is designed to test the optimizer's ability to maintain subpopulations in the different Pareto-optimal regions<sup>[2]</sup>.
 
 ## Results
 Across all DTLZ models the scores between binary domination and continuous domination are fairly similar. With 20 retries the differences seem to be negligible. The hypervolume averages below have been normalized by dividing each hypervolume by the number of objectives that were tested as the hypervolume would grow with an increased number of objectives. Even after normalized most of the Hypervolume scores were better for higher number of objectives. 
