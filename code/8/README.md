@@ -13,6 +13,9 @@ NSGA-II is an improvement to an original NSGA algorithm. NSGA-II uses crowding d
 populated around a specific area and works to spread out the solutions across the objective space. 
 
 ![NSGA-II Visualization](http://i.imgur.com/VkbVbTi.gif)
+
+The process of NSGA-II is illustrated in the above image. First a collection of children solutions are produced from the parent population. Then the collection of candidate solutions are split into different frontiers based on their performance in a non-dominated sort. After being seperated, the candidates are trimmed back down to a managable population size by selecting the best frontiers and using a crowding distance sort to take the best part of candidates from the last frontier. Then the population is ready to produce new children again and go through the same fitness process.
+
 ### Binary Domination with Cuboid Sorting
 In binary domination a candidate dominates another candidate when a few things happen<sup>[4]</sup>:
 
