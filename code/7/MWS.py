@@ -31,7 +31,7 @@ def mws(model, baseline):
     eb = 0
     prev = []
     lives = 5
-    a = randint(1, 20)
+    a = randint(1, 19)
     seed(a)
     era = 1
     # retries

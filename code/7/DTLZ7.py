@@ -68,7 +68,9 @@ class DTLZ7(Model):
         y_objs = other.fi()
         # print(x_objs)
         # print(y_objs)
-        return loss(x_objs, y_objs)
+        l1 = loss(x_objs, y_objs)
+        l2 = loss(y_objs, x_objs)
+        return l2 - l1
 
     def findMinMax(self):
         for i in xrange(self.objectiveSpace):

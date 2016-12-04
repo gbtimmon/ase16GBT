@@ -12,7 +12,7 @@ if __name__ == '__main__':
         data = []
         baseline = [model() for _ in xrange(repeats)]
         for i,optimizer in enumerate([sa,mws,de]):
-        # for i,optimizer in enumerate([sa]):
+        # for i,optimizer in enumerate([de]):
             opt_rpt = []
             opt_rpt.append(optimizer.func_name)
             for j in range(repeats):
@@ -21,5 +21,7 @@ if __name__ == '__main__':
                 pre.copy(baseline[j])
                 res = optimizer(model, baseline[j])
                 opt_rpt.append(res.cdom(pre))
+                # print(res.candidates)
+                # opt_rpt.append(res.score() * 1000)
             data.append(opt_rpt)
         rdivDemo(data)

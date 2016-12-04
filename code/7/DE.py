@@ -76,7 +76,7 @@ def de(mode, baseline, max_tries=20, frontier_size=25, f=0.75, cf=0.3, epsilon=0
     frontier = [mode() for _ in range(frontier_size)]
     prev = []
     lives = 10
-    a = randint(1, 20)
+    a = randint(1, 19)
     seed(a)
     # eras
     for k in range(max_tries):
