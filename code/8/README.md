@@ -122,6 +122,9 @@ Performance for DTLZ 7 was very similar across all numbers of objectives and dec
 
 ## Threats to Validity
 
+Despite having findings in our process of implementing NSGA-II there may be threats to the validity of our results and conclusions. One of the biggest indicators of a problem was our finding that there was not a significant difference in performance between binary and continuous domination. According to lecture notes on performance, continuous domination should have performed better as more objectives were added to the problem space<sup>[4]</sup>. However, our results indicate that there was no significant differentce between the two comparison methods. In fact, from a timing perspective, cdom ran slower than bdom and did not provide any significant advantage as a result. 
+
+Another potential threat was the use of only one metric to test whether a solution was good or not. Due to time constraints our team only implemented the hypervolume metric, while a good indicator of a successfully formed pareto frontier, may not be capable of telling the whole story alone. Metrics like spread and igd would be helpful to determine whether a set of candidate solutions were evenly distributed along the pareto frontier and close to an ideal solution<sup>[4]</sup>. Without this information we don't have a complete picture on whether our results are truly the best of the best when it comes to finding ideal candidate solutions. 
 
 ## References
 [1] http://ieeexplore.ieee.org.prox.lib.ncsu.edu/document/996017/
