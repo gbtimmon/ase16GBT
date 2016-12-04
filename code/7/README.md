@@ -161,51 +161,52 @@ The Scott & Knott method make use of a cluster analysis algorithm, where, starti
 ### Counts of Earlty termination
 | Optimizer | Avg. No. eras before termination |
 |-----------|----------------------------------|
-| SA        | 13.6                             |
-| MWS       | 14.6                             |
-| DE        | 13.9                             |
+| SA        | 14.8                             |
+| MWS       | 9.2                              |
+| DE        | 16.9                             |
 
 As shown in the table, Simulated Annealing has the smallest number of early termination. However, Simulated Anealing is continuously updating just one candidate by jumping randomly. It's doubtful that Simulated Anealing may not be able to get a better value and then keeping it's current value for a long time and in the end early terminated. 
 
-For the other two algorithm:
+As shown in the table, Max-WalkSat has the smallest number of eras to terminate the program. The reason resides in the design of algorithm: every time after a random jump, Max-WalkSat has a probability to do local search to maximize the score in one of the directions. This will give it a high quality of candidates, which will also result in the algorithm getting it's best score at the early stage. 
 
-- Differential Evolution is keeping a population with size of 50. The quality of each candidate will get update in each era which is not helping it to terminate quicker than Simulated Annealing. 
+Simulated Annealing, on the other hand, just perform random jump and jump to lower optimized point depending on a cooling function. Hence, the best candidates is more frequently updated in this function than Max-WalkSat. When it changes a lot, A12 function will conclude that the candidates in current era is still changing and then give the algorithm more lives to move on. Hence, Simulated Annealing is doing much worse than Max-WalkSat in early terminating the program.
 
-- Max-WalkSat will do local search at a probability after the random jump, which will give it higher possibility to get a better value while searching. By frequently updating the solution, it will continuously getting more lives and as a result, hard to early terminate. 
+For Differential Evolution, as it keep a population as a frontier (in our experiment, the population size is equal to the era size which is 50), each candiate performing mutation individually. As a multi-objecitve optimizer, it provide better exploration rate than the other two algorithms. However, when the exploration rate increases, the candidate will continuously updating the best candidate it found. Hence, A12 function will also judge the population in current era is changing. An optional way to construct the era might be to find the best candidate in each update. Then the era can be constructed with an array of size 50 containing the best candidate found in each update. The optional way to perform comparison may dramatically decrease the number of eras in Differential Evolution. 
 
 
 ### Comparison of three optimizers depending on the cdom loss
 
 ```
-rank ,         name ,    med   ,  iqr 
-----------------------------------------------------
-   1 ,           de ,    -1.70  ,  1.04 (               |     --*---   ), -2.06,  -1.69,  -1.03
-   1 ,           sa ,    -1.35  ,  0.93 (               |      ----*   ), -2.01,  -1.31,  -1.08
-   1 ,          mws ,    -1.29  ,  0.50 (               |         -*-  ), -1.44,  -1.28,  -0.94
 
 rank ,         name ,    med   ,  iqr 
 ----------------------------------------------------
-   1 ,           de ,    -1.35  ,  1.52 (               |           --*), -2.57,  -1.35,  -1.05
-   1 ,           sa ,    -1.32  ,  1.10 (               |            -*), -2.15,  -1.30,  -1.04
-   1 ,          mws ,    -1.06  ,  1.05 (               |            -*), -1.95,  -1.03,  -0.91
+   1 ,          mws ,    0.14  ,  1.17 (           --*-|              ), -0.26,  0.16,  0.90
+   1 ,           de ,    0.19  ,  1.55 (           --*-|-             ), -0.38,  0.21,  1.17
+   1 ,           sa ,    0.39  ,  1.21 (           ---*|              ), -0.26,  0.42,  0.95
 
 rank ,         name ,    med   ,  iqr 
 ----------------------------------------------------
-   1 ,           sa ,    -1.49  ,  1.28 (               |     ----*--  ), -2.15,  -1.47,  -0.88
-   1 ,           de ,    -1.35  ,  0.96 (               |     ----*-   ), -2.05,  -1.33,  -1.09
-   1 ,          mws ,    -1.21  ,  0.61 (               |        --*   ), -1.57,  -1.19,  -0.96
+   1 ,           de ,    0.31  ,  1.56 (           ---*|-             ), -0.56,  0.39,  1.00
+   1 ,          mws ,    0.32  ,  1.72 (           ---*|--            ), -0.47,  0.34,  1.25
+   1 ,           sa ,    0.50  ,  1.68 (           ----*--            ), -0.35,  0.61,  1.33
+
+rank ,         name ,    med   ,  iqr 
+----------------------------------------------------
+   1 ,           de ,    0.70  ,  1.22 (       -*-     |              ), 0.40,  0.74,  1.62
+   1 ,          mws ,    0.87  ,  1.54 (      --*-     |              ), -0.05,  0.98,  1.49
+   1 ,           sa ,    1.03  ,  1.73 (      ---*-    |              ), 0.11,  1.08,  1.84
+
 
 ```
 
-As shown in the table, Differential Evolution works best on DTLZ 7 with 2 objectives and 10 decisions followed by Max-WalkSat then Simulated Annealing. Since we are comparing continuous domination loss numbers generated between the first era and final era, this indicates that DE produces the best loss.
 
 As shown in the table, all three algorithms have the same rank with each of them doing good in different areas.
 
-- Simulated Annealing: as discussed above, it has the smallest number of eras to get early terminated. However, as can be seen in the table, the results in each repeat of Simulated Anealing is quite wide spreaded, which suggests that the algorithm is not very stable. 
+- Differential Evolution: the performance of Differential Evolution is pretty good. It is not as stable as Max-WalkSat because each individual inside the population follow their own ways to mutate, which is time consuming to get convergence (move to heaven). However, if more eras is given, the performance of Differential Evolution is expected to be increasingly better. The reason is Differential Evolution explore the landscape, or the problem, better than the other two single objective algorithms.
 
-- Max-WalkSat on the other hand, it very stable. All of the results tend to fall in a pretty narrow range. However, the performance of Max-WalkSat is not as good as expected. This may due to the limited number of eras provided in the experiment or a bad luck.
+- Max-WalkSat: at a probability, Max-WalkSat performs better than Differential Evolution. This is because of all the three algorithms do not ensure to provide the best solution or how good the solution is. Due to the local search ingredient in Max-WalkSat, it can explore the landscape better than Simulated Annealing in the same amount of era. Hence, the performance of Max-WalkSat will be highly possibily to be better than Simulated Annealing. 
 
-- Differential Evolution: the performance of Differential Evolution is pretty good. It is not as stable as Max-WalkSat because each individual inside the population follow their own ways to mutate, which is time consuming to get convergence (move to heaven). However, when more eras is given, the performance of Differential Evolution is expected to be increasingly better. The reason is Differential Evolution explore the landscape, or the problem, better than the other two single objective algorithms.
+- Simulated Annealing: as for Simulated Annealing, there is anohter drawback found in this experiment. The result of Simulated Annealing is wider spread than the other two algorithms. This indicate that the algorithm is not as stable as the others to provide a good solution. 
 
 ## Threats to Validity
 
