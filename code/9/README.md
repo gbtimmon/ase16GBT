@@ -1,7 +1,7 @@
 # Optimizing the Optimizer: Using DE to optimize GA
 
 ## Abstract
-In this homework we were asked to use Differential Evolution to optimize default values for a Genetic Algorithm so it would produce better solutions in it's optimization. We hooked GA into the Problem workshop code from previous classes and used that to run DE. In our results we found that the tuned GA ran significantly better than the untuned GA. However, we are worried that limiting the population size and number of retries for our DE may have limited the potential of our solutions. 
+In this homework we were asked to use Differential Evolution to optimize default values for a Genetic Algorithm so it would produce better solutions in it's optimization. We hooked GA into the Problem workshop code from previous classes and used that to run DE. In our results we found that the tuned GA ran significantly better than the untuned GA. However, we are worried that limiting the population size and number of retries for our DE may have interfered with the potential of our solutions. 
 
 ## Introduction
 In this part of the homework the goal was to optimize the defaults of the Genetic Algorithm (GA) by running it through an instance of differential evolution. We hypothesize that by tuning the GA it will perform better against an untuned version of the GA with the usual defaults. 
