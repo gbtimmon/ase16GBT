@@ -14,7 +14,7 @@ populated around a specific area and works to spread out the solutions across th
 
 ![NSGA-II Visualization](http://i.imgur.com/VkbVbTi.gif)
 ### Binary Domination with Cuboid Sorting
-In binary domination a candidate dominates another candidate when a few things happen:
+In binary domination a candidate dominates another candidate when a few things happen<sup>[4]</sup>:
 
 * If at least one objective score is better
 * No objective is worse than the other candidate
@@ -41,9 +41,39 @@ def bdom(problem, one, two):
 
 The code starts by evaluating each objective in order to obtain the latest score for each objective. Then the code iterates through each objective in the problem and tests whether the score of the first candidate is better than the score of the second. If it is then dominates is marked as True. However, if there is a case where the objectives fail the better test and are not equal that means that an objective on the second candidate is better than the first so the domination will fail immediately by returning False.  
 
-
-
 ### Continuous Dominiation
+
+One downside to binary domination is that it will only tell whether or not a point dominates another, but now by how much<sup>[4]</sup>. With continuous domination, callers will recieve information on how much a candidate dominates another. For instance, if there are a few objectives that perform worse on one candidate but one objective where it performs significantly better then continuous domination will take that into account with a cumulitive total domination score. By looking at the overall picture, candidates are more likely to sacrifice some smaller score differences in order to take a huge gain in another area. 
+
+In addition to the scoring differences, continuous domination performs even better than binary domination when the number of objectives increases. With many objectives it becomes harder for one candidate to outscore another on every single objective. With continuous domination you will be able to take into account the differences across all objectives and come to a conclusion every time.
+
+```python
+def exp_loss(problem, i, x, y, n):
+    w = -1 if problem.objectives[i].do_minimize else 1
+    return -1 * math.e**(w * (x - y) / n)
+
+
+def loss(problem, x, y):
+    losses = 0
+    n = min(len(x), len(y))
+    for i, (x1, y1) in enumerate(zip(x, y)):
+        losses += exp_loss(problem, i, x1, y1, n)
+    return losses / n  # return mean loss
+
+
+def cdom(problem, one, two):
+    x = []
+    y = []
+    for i, (xobj, yobj) in enumerate(zip(one.objectives, two.objectives)):
+        x.append(problem.objectives[i].normalize(xobj))
+        y.append(problem.objectives[i].normalize(yobj))
+    l1 = loss(problem, x, y)
+    l2 = loss(problem, y, x)
+    return l1 < l2   # l1 is better if it losses least
+```
+
+In the above code cdom() is called initially. First it will normalize the objectives so everything will compare on the same playing field. Then it will call a loss function on both sets of objectives. If the first candidate has the least losses then it will be the better performing candidate. In the loss function the differences between the two problems are exponentialized and added to a running total, which is then returned as a mean across all objectives. The reason we have an exponenet is to make the differences more dramatic between two candidates. 
+
 
 ## DTLZ
 In order to test how NSGA-II performs, a problem set must be created. The set must also be flexible in its number of decisions and objectives in order to test different aspects of the optimizer. For such a purpose a test suite called DTLZ was created. DTLZ uses a variety of different functions to create different flexible scenarios to run an optimizer against.<sup>[2]</sup>
@@ -94,3 +124,4 @@ Performance for DTLZ 7 was very similar across all numbers of objectives and dec
 [1] http://ieeexplore.ieee.org.prox.lib.ncsu.edu/document/996017/
 <br> [2] http://e-collection.library.ethz.ch/eserv/eth:24696/eth-24696-01.pdf
 <br> [3] Binary Domination code taken from GA class workshop
+<br> [4] https://github.com/txt/ase16/blob/master/doc/perform.md
