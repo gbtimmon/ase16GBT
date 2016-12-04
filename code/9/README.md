@@ -13,7 +13,7 @@ For our implementation of DE we would extrapolate a new solution based on the ot
 
 ## GA
 
-For this problem we used the Genetic Algorithm provided in the code workshop as our basis of the problem. We configured a Problem to take on a GA. The decisions we optimized for were mutation rate, crossover rate, population size and number of generations. On a baseline run of GA the defaults we use are 0.01 for mutation rate, 0.9 for crossover rate, 100 for population size and 250 for generations.
+For this problem we used the Genetic Algorithm provided in the code workshop as our basis of the problem<sup>[1]</sup>. We configured a Problem to take on a GA. The decisions we optimized for were mutation rate, crossover rate, population size and number of generations. On a baseline run of GA the defaults we use are 0.01 for mutation rate, 0.9 for crossover rate, 100 for population size and 250 for generations.
 
 For mutation rate we decided on a range between 0.01 and 0.1. We decided to keep the mutation rate somewhat lower so it wouldn't be mutating the entire population and throwing away any progress towards an ideal solution. We varied the crossover rate between 0.1 and 1.0. We felt that any range of crossover could produce different kinds of results. If we had a slowly changing population it might choose other factors to optimize for. 
 
@@ -69,3 +69,4 @@ Finally we think it would be interesting to run a GA using the GA problem in ord
 
 ## References
 [1] https://github.com/txt/ase16/blob/master/doc/de.md
+<br> [2] https://github.com/ase16-ta/ga
