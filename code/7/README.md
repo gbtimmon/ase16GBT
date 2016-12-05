@@ -165,8 +165,6 @@ The Scott & Knott method make use of a cluster analysis algorithm, where, starti
 | MWS       | 9.2                              |
 | DE        | 16.9                             |
 
-As shown in the table, Simulated Annealing has the smallest number of early termination. However, Simulated Anealing is continuously updating just one candidate by jumping randomly. It's doubtful that Simulated Anealing may not be able to get a better value and then keeping it's current value for a long time and in the end early terminated. 
-
 As shown in the table, Max-WalkSat has the smallest number of eras to terminate the program. The reason resides in the design of algorithm: every time after a random jump, Max-WalkSat has a probability to do local search to maximize the score in one of the directions. This will give it a high quality of candidates, which will also result in the algorithm getting it's best score at the early stage. 
 
 Simulated Annealing, on the other hand, just perform random jump and jump to lower optimized point depending on a cooling function. Hence, the best candidates is more frequently updated in this function than Max-WalkSat. When it changes a lot, A12 function will conclude that the candidates in current era is still changing and then give the algorithm more lives to move on. Hence, Simulated Annealing is doing much worse than Max-WalkSat in early terminating the program.
